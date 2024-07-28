@@ -1,0 +1,89 @@
+
+<h2  class="text-layout">MANTENIMIENTO USUARIOS</h2>
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="Crear usuario" [routerLink]="['/crear-usuario']" icon="pi pi-plus" class="p-button-outlined p-button-success mr-2" ></button>
+        </ng-template>
+
+    </p-toolbar>
+
+    <p-table #dt [value]="usuarios" [rows]="10" [paginator]="true" [globalFilterFields]="['id','nombre','apellido','enabled']" responsiveLayout="scroll"[rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Mostrando {first} al {last} de {totalRecords} usuarios." [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h5 class="m-0">Lista de usurios</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText #textInput type="text" (input)="dt.filterGlobal(textInput.value, 'contains')" placeholder="Buscar usuario..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="username">Username <p-sortIcon field="username"></p-sortIcon></th>
+                <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+                <th pSortableColumn="apellido">Apellido <p-sortIcon field="apellido"></p-sortIcon></th>
+                <th pSortableColumn="filial">Filial <p-sortIcon field="filial"></p-sortIcon></th>
+                <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+                <th pSortableColumn="enabled">Estado<p-sortIcon field="enabled"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-usuario>
+            <tr *ngIf="personal!=usuario.nombre">
+                <td >{{usuario.id}}</td>
+                <td>{{usuario.username}}</td>
+                <td>{{usuario.nombre}}</td>
+                <td>{{usuario.apellido}}</td>
+                <td *ngIf="usuario.filial==1">{{tiposFilial[0].nombre}}</td>
+                <td *ngIf="usuario.filial==2">{{tiposFilial[1].nombre}}</td>
+                <td *ngIf="usuario.filial==3">{{tiposFilial[2].nombre}}</td>
+                <td *ngIf="usuario.filial==4">{{tiposFilial[3].nombre}}</td>
+                <td>{{usuario.email}}</td>
+                <!--<td>{{usuario.roles[0].nombre}}</td>-->
+                <td *ngIf="usuario.enabled == true"  ><p-tag value="Activo" severity="success" ></p-tag></td>
+                <td *ngIf="usuario.enabled != true" ><p-tag severity="danger" value="Inactivo"></p-tag></td>
+                <td>
+                    <button  (click)="rutear(usuario)" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning" ></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                En total hay {{usuarios ? usuarios.length : 0 }} usuarios.
+            </div>
+        </ng-template>
+       
+    </p-table>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</div>
+
+<p-dialog [(visible)]="usuarioDialog" [style]="{width: '450px'}" header="Crear Usuario" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="id">ID</label>
+            <input type="text" pInputText id="id" [(ngModel)]="usuario.id" required autofocus />
+            <small class="p-error" *ngIf="submitted && !usuario.id">ID es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="nombre">Description</label>
+            <textarea id="nombre" pInputTextarea [(ngModel)]="usuario.nombre" required rows="3" cols="20"></textarea>
+            <small class="p-error" *ngIf="submitted && !usuario.nombre">NOMBRE es requerido.</small>
+        </div>
+        <div class="field">
+            <label for="enabled">Estado</label>
+            <p-dropdown [options]="statuses"  [(ngModel)]="usuario.enabled" name="enabled" placeholder="Seleccionar sexo..." optionValue="nombre" optionLabel="nombre"
+            [showClear]="true">
+             </p-dropdown>  
+        </div>
+
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <!--<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>-->
+    </ng-template>
+</p-dialog>

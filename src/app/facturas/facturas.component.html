@@ -1,0 +1,158 @@
+<br>
+<p-toast></p-toast>
+<p-toolbar >
+    <div class="p-toolbar-group-left">
+        <h2 class="text-layout">PAGO DE TRAMITES: Nueva boleta </h2>
+    </div>
+    
+    <div class="p-toolbar-group-right">
+        <p-button [routerLink]="['/colegiados']" icon="pi pi-times" styleClass="p-button-danger"></p-button>
+    </div>
+</p-toolbar>
+
+<p-toolbar *ngIf="factura.colegiado.habilidad.nombre=='EXTERNO'" class="col-12 md:col-12">
+    <div class="p-toolbar-group-left" style="width: 100%;">
+        <div class="col-12 md:col-12">
+            <div class="p-inputgroup">
+                <button (click)="consultarReniec(dniConsulta)" type="button" pButton pRipple label="Consultar DNI en la RENIEC"></button>
+                <input (keyup.enter)="onKeyUp(dniConsulta)" type="text" [(ngModel)]="dniConsulta" pInputText placeholder="Ingrese DNI">
+            </div>
+        </div>
+    </div>
+</p-toolbar>
+
+<p-card >
+    <form >
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Colegiado</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="colegiado"  pInputText  value="{{factura.colegiado.nombre}} {{factura.colegiado.apellido}}">         
+                </div>
+            </div>
+            
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Series</h4>
+                <p-dropdown [options]="tiposSeries"  [(ngModel)]="factura.serie" name="serie" placeholder="Seleccionar serie" optionValue="nombre" optionLabel="nombre"
+                    [showClear]="true">
+                </p-dropdown> 
+            </div>
+            <div  class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Método de pago</h4>
+                <p-dropdown [options]="tiposPagos"  [(ngModel)]="factura.formaPago" name="formaPago" placeholder="Seleccionar metodo de pago" optionValue="nombre" optionLabel="nombre"
+                    [showClear]="true">
+                </p-dropdown> 
+            </div>
+            <div *ngIf="factura.colegiado.habilidad.nombre!='EXTERNO'"  class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Número de boleta RAPIFAC</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input type="text" name="numeroTransaccion" [(ngModel)]="factura.numeroTransaccion"  pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div  *ngIf="factura.colegiado.habilidad.nombre=='EXTERNO'" class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Número de boleta RAPIFAC</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input type="text" name="razon" [(ngModel)]="factura.razon"  pInputText autocomplete="off">         
+                </div>
+            </div>
+
+            <div *ngIf="factura.colegiado.habilidad.nombre=='EXTERNO'" class="col-12 md:col-6">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Nombre del d cliente</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input type="text" name="numeroTransaccion" [(ngModel)]="factura.numeroTransaccion"  pInputText autocomplete="off">         
+                </div>
+            </div>
+
+            <div *ngIf="factura.colegiado.habilidad.nombre=='EXTERNO'" class="col-12 md:col-6">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">DNI</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-id-card"></i></span>
+                    <input type="text" name="observacion" [(ngModel)]="factura.observacion" pInputText autocomplete="off">         
+                </div>
+            </div>
+
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Resoluciones (no obligatorio)</h4>
+                <div class="p-inputgroup">
+                    <textarea [(ngModel)]="factura.resolucion" name="resolucion" rows="3" cols="30" pInputTextarea placeholder="Resolución 123A : Descuento por accidente..."></textarea>
+                </div>
+            </div>
+            <div *ngIf="factura.colegiado.habilidad.nombre!='EXTERNO'" class="col-12 md:col-12">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Observaciones (no obligatorio)</h4>
+                <div class="p-inputgroup">
+                    <textarea [(ngModel)]="factura.observacion" name="observacion" rows="3" cols="30" pInputTextarea ></textarea>
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Buscar Tramites</h4>
+                <mat-form-field [style]="'width: 100%;'" appearance="fill">
+                    <mat-label>Añadir tramite</mat-label>
+                    <input type="text"
+                            placeholder="Añadir tramite"
+                            aria-label="Tramites"
+                            matInput
+                            [formControl] = "autocompleteControl"
+                            [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarNombre" (optionSelected)="seleccionarTramite($event)">
+                        <mat-option *ngFor="let tramite of tramitesFiltrados | async" [value]="tramite">
+                            {{tramite.nombre}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="col-12 md:col-12" *ngIf="factura.items.length==0">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">No hay tramites asignados para la factura. Debe agregar al menos una!!</h4>
+            </div>
+            <div class="col-12 md:col-12" *ngIf="factura.items.length>0">
+                <p-table responsiveLayout="scroll" [value]="factura.items">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Tramite</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>sub Total</th>
+                            <th>Eliminar</th>
+                        </tr>
+                        
+                    </ng-template>
+       
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td>{{item.tramite.nombre}}</td>
+                            <td>{{item.tramite.descripcion}}</td>
+                            <td>S/ {{item.tramite.precio}}</td>
+                            <td><input type="number" value="{{item.cantidad}}" (change)="actualizarCantidad(item.tramite.id,$event)"></td>
+                            <td>S/ {{item.calcularImporte()}}</td>
+                            <td><button type="button" (click)="eliminarItemFactura(item.tramite.id)">X</button></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <!--
+                <div class="p-toolbar-group-right" *ngIf="factura.items.length>0">
+                    <h3 class="text-layout">TOTAL : {{ factura.calcularGranTotal() }} </h3>
+                </div>-->
+            </div>
+        </div>
+        <p-toolbar *ngIf="factura.resolucion">
+            <div class="p-toolbar-group-right">
+                <h4 class="text-layout">Descuento: S/ &nbsp;</h4>
+                <input type="text" name="descuento"  pInputText autocomplete="off"  [(ngModel)]="factura.descuento">  
+            </div>
+        </p-toolbar>
+        <p-toolbar *ngIf="factura.items.length>0">
+            <div class="p-toolbar-group-left">
+                <button pButton pRipple type="submit" label="Crear Boleta" (click)="create()" class="p-button-secondary ui-button"></button>
+            </div>
+            <div class="p-toolbar-group-right">
+                <h2 class="text-layout">TOTAL: S/ {{ factura.calcularGranTotal() }} </h2>
+            </div>
+        </p-toolbar>
+    </form>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+    <br>
+</p-card>

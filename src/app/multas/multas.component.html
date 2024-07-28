@@ -1,0 +1,49 @@
+
+<br>
+<p-card header="LISTA DE MULTAS" [style]="{ 'margin-bottom': '2em'}">
+    <ng-template pTemplate="header">
+    </ng-template>  
+    <p-toolbar>
+        <div class="p-toolbar-group-left" style="width: 100%;">
+            <div class="grid p-fluid" style="width: 100%;">
+                <div *ngIf="authService.hasRole('ROLE_ADMIN')" class="col-12 md:col-3">
+                    <button pButton pRipple type="button" (click)="rutearCrear()" label="Crear Multa" class="p-button-secondary ui-button"></button>
+                </div>
+            </div>
+            <div class="grid p-fluid" >
+                <p-button [routerLink]="['/colegiados']" icon="pi pi-times" styleClass="p-button-danger"></p-button>
+            </div>
+        </div>
+    </p-toolbar>
+
+    <p-table [value]="multas" responsiveLayout="scroll" [paginator]="true" [rows]="10" currentPageReportTemplate="Mostrando {first} al {last} de {totalRecords} tramites" [rowsPerPageOptions]="[10,25,50]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Multa</th>
+                <th>Descripción de la multa</th>
+                <th>Precio</th>
+                <th *ngIf="authService.hasRole('ROLE_ADMIN')">Colegiados con Multas</th>
+                <!--<th *ngIf="authService.hasRole('ROLE_ADMIN')">Asignar Multa</th>-->
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-multa>
+            <tr>
+                <td>{{multa.id}}</td>
+                <td >{{multa.nombre}}</td>
+                <td>{{multa.descripcion}}</td>
+                <td>S/ {{multa.precio}}</td>
+                <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+                    <button icon="pi pi-users" pButton pRipple type="button" (click)="rutear(multa)" label="Colegiados con Multa"  class="p-button-outlined p-button-warning"></button>
+                </td>
+                <!--
+                <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+                    <button icon="pi pi-user-edit" pButton pRipple type="button" label="Asingar Multa"  class="p-button-outlined p-button-info"></button>
+                </td>
+                -->
+            </tr>
+        </ng-template>
+    </p-table>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</p-card>
+<br>

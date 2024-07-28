@@ -1,0 +1,32 @@
+<p-menubar *ngIf="authService.hasRole('ROLE_USER')" [model]="items">
+    <ng-template pTemplate="start">
+        <img src="/assets/icac2023u.svg" height="40" class="mr-2">
+    </ng-template>
+
+    <p-button pTooltip="Hay cumpleañeros :)" tooltipPosition="left" (click)="showPositionDialog('top-right')" *ngIf="colegiados.length>0" pRipple styleClass="p-button-success p-button-rounded p-button-outlined"><i class="pi pi-bell" pBadge [value]="colegiados.length.toString()" severity="danger"></i></p-button>
+    <p-button  [disabled]="true" *ngIf="colegiados.length==0" pRipple pTooltip="No hay cumpleañeros" tooltipPosition="left" styleClass="p-button-info p-button-rounded p-button-outlined"><i class="pi pi-bell"></i></p-button>
+</p-menubar>
+<p-dialog header="LISTA DE CUMPLEAÑEROS DEL DÍA: {{date | date:'mediumDate'}}"  [(visible)]="displayPosition" [position]="position" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+    <p-table [value]="colegiados" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Colegiatura</th>
+                <th>Nombre</th>
+                <th>Habilidad</th>
+                <th>Nacimiento</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-colegiado>
+            <tr>
+                <td>{{colegiado.colegiatura}}</td>
+                <td>{{colegiado.nombre}} {{colegiado.apellido}}</td>
+                <td>{{colegiado.habilidad.nombre}}</td>
+                <td>{{colegiado.nacimiento}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="displayPosition=false" label="Aceptar" class="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>

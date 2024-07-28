@@ -1,0 +1,41 @@
+<p-card header="REPORTE DE COLEGIADOS SEGÚN HABILIDAD" [style]="{ 'margin-bottom': '2em'}">
+    <ng-template pTemplate="header">
+    </ng-template>  
+    <p-toolbar>
+        <div class="p-toolbar-group-left" style="width: 100%;">
+            <div class="grid p-fluid" style="width: 100%;">
+                <div class="col-12 md:col-8">
+                    <p-splitButton [disabled]="isDisabled" label="Generar reporte de ..." icon="pi pi-check"  [model]="items" styleClass="p-button-success"></p-splitButton>
+                </div>
+                <div class="col-12 md:col-4">
+                    <button class="p-button-info p-button-outlined"  pButton type="button" (click)="cargar()" label="General nuevo reporte" icon="pi pi-refresh"></button>
+                </div>
+            </div>
+        </div>
+    </p-toolbar>
+</p-card>
+<p-table #dt [columns]="cols" [paginator]="true" [rows]="10"  currentPageReportTemplate="Mostrando {first} al {last} de {totalRecords} colegiados" [rowsPerPageOptions]="[10,25,50]" [value]="colegiadosFiltratos" selectionMode="multiple" [(selection)]="selectedProducts" responsiveLayout="scroll" [exportHeader]="'customExportHeader'">
+    <ng-template pTemplate="caption">
+        <div class="flex">
+            <!--<button type="button" pButton pRipple icon="pi pi-file" (click)="dt.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>-->
+            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"  class="p-button-success mr-2"  pTooltip="XLS" tooltipPosition="bottom"></button>
+            <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+<br>

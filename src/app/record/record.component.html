@@ -1,0 +1,117 @@
+<br>
+    
+    <div class="card" style="padding: 0.5em 2em; background-color: #1f2d40;">
+        <p-toolbar *ngIf="colegiado.habilidad.nombre!='EXTERNO'">
+            <div class="p-toolbar-group-left">
+                <h2 class="text-layout">BOLETAS DEL COLEGIADO: {{colegiado.nombre}} {{colegiado.apellido}} </h2>
+            </div>
+            
+            <div class="p-toolbar-group-right">
+                <p-button [routerLink]="['/colegiados']" icon="pi pi-times" styleClass="p-button-danger"></p-button>
+            </div>
+        </p-toolbar>
+        <p-messages severity="warn" *ngIf="colegiado.habilidad.nombre=='ACTIVO CON FRACCIONAMIENTO'">
+            <ng-template pTemplate>
+                <div class="ml-4">El colegiado se encuentra en<b> < {{colegiado.habilidad.nombre}} > </b>, por favor verificar si el colegiado cumplio con el compromiso de su pagó, caso contrario editar su estado a HABILITADO.&nbsp;&nbsp;</div>
+                <p-tag styleClass="mr-2" severity="danger" value="{{colegiado.habilidad.nombre}}"></p-tag>
+            </ng-template>
+        </p-messages>
+        <br>
+        <div class="grid p-fluid" *ngIf="colegiado.habilidad.nombre!='EXTERNO'">
+            <div class="col-12 md:col-3">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Número de colegiatura</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-sort-numeric-up"></i></span>
+                    <input readonly name="colegiatura" [(ngModel)]="colegiado.colegiatura" type="text" pInputText placeholder="Colegiatura" autocomplete="off" >         
+                </div>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Nombre y apellidos</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-sort-numeric-up"></i></span>
+                    <input readonly name="colegiatura" [(ngModel)]="colegiado.nombre" type="text" pInputText placeholder="Colegiatura" autocomplete="off" >         
+                </div>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Número de DNI</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-id-card"></i></span>
+                    <input readonly type="text" name="dni" [(ngModel)]="colegiado.dni" pInputText placeholder="DNI del colegiado" autocomplete="off">         
+                </div>
+            </div>
+
+            <div class="field col-12 md:col-3">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Fecha de colegiatura</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
+                    <input readonly type="text" name="fechaColegiatura" value="{{colegiado.fechaColegiatura  |date:'dd/MM/yyyy' }}"  pInputText autocomplete="off">
+                </div>
+            </div>
+
+        </div>
+        <br>
+
+        <p-toolbar *ngIf="colegiado.habilidad.nombre!='EXTERNO'">
+            <div class="p-toolbar-group-left">
+                <h2 class="text-layout">LISTA DE DEUDAS (MULTAS - CUOTAS)</h2>
+            </div>
+
+            <div  class="p-toolbar-group-right">
+                <button pButton pRipple (click)="imprimirBoleta(1)" label="&nbsp;Imprimir Record&nbsp;" class="p-button-outlined p-button-warning mr-2" icon="pi pi-download"></button>
+                <button pButton pRipple [routerLink]="['/pagos',colegiado.id]" label="&nbsp;Seguir Pagando&nbsp;" class="p-button-outlined p-button-success mr-2" icon="pi pi-shopping-cart"></button>
+            </div>
+        </p-toolbar>
+
+        <!--BOLETAS DE CLIENTE UNICO-->
+        <!--BOLETAS DE CLIENTES EXTERNOS-->
+        <p-table *ngIf="mesesDeuda>0 || multas.length>0" responsiveLayout="scroll" [value]="factura.items">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Multa</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>sub Total</th>
+                </tr>
+                
+            </ng-template>
+
+            <ng-template pTemplate="body" let-item>
+                <tr>
+                    <td *ngIf="item.tramite.id!=1">{{item.tramite.nombre}}</td>
+                    <td *ngIf="item.tramite.id==1">CUOTA MENSUAL</td>
+                    <td>{{item.tramite.descripcion}}</td>
+                    <td *ngIf="item.tramite.id!=1">S/ {{item.tramite.precio - item.tramite.precio*0.6}}</td>
+                    <td *ngIf="item.tramite.id==1">S/ {{item.tramite.precio}}</td>
+                    <td *ngIf="item.tramite.id!=1">1 MULTA</td>
+                    <td *ngIf="item.tramite.id==1">{{this.mesesDeuda}} MESES</td>
+                    <td *ngIf="item.tramite.id!=1">S/ {{item.calcularImporte()}}</td>
+                    <td *ngIf="item.tramite.id==1">S/ {{item.tramite.precio * this.mesesDeuda}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <p-toolbar *ngIf="mesesDeuda>0 || multas.length>0">
+            <div class="p-toolbar-group-right">
+                <h4 class="text-layout">SUB TOTAL: &nbsp; <b>S/ {{ subtotal }}</b></h4>
+            </div>
+        </p-toolbar>
+        <p-toolbar *ngIf="mesesDeuda>0 || multas.length>0">
+            <div class="p-toolbar-group-right">
+                <h4 class="text-layout">DESCUENTO: &nbsp; <b>S/ - {{ descuento }}</b></h4>
+            </div>
+        </p-toolbar>
+        <p-toolbar *ngIf="mesesDeuda>0 || multas.length>0">
+            <div class="p-toolbar-group-right">
+                <h4 style="font-size: x-large;" class="text-layout">DEUDA TOTAL: &nbsp; <b>S/ {{ subtotal-descuento | number:'1.2-2' }}</b></h4> 
+            </div>
+        </p-toolbar>
+        <p-toolbar *ngIf="mesesDeuda<=0 && multas.length<1">
+            <div class="p-toolbar-group-right">
+                <h4 style="font-size: x-large;" class="text-layout"><b>EL COLEGIADO NO TIENE DEUDAS PENDIENTES.</b></h4> 
+            </div>
+        </p-toolbar>
+        <br>
+    </div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>

@@ -1,0 +1,144 @@
+<p-toast position="bottom-center" key="c" (onClose)="onReject()" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+        <div class="p-flex p-flex-column" style="flex: 1">
+            <div class="p-text-center">
+                <div style="margin: auto; text-align:center !important;">
+                    <i class="pi pi-exclamation-triangle" style="font-size: 3rem;"></i>
+                </div>
+                
+                <h4 style="text-align:center !important;">{{message.summary}}</h4>
+                <p style="text-align:center !important;">{{message.detail}}</p>
+            </div>
+            <div class="p-grid p-fluid">
+                <div class="p-col-6">
+                    <button type="button" pButton (click)="onConfirm()" label="OK" class="p-button-success"></button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-toast>
+
+<p-card header="REPORTE DE FACTURAS EXTORNADAS DEL DÍA : {{consulta | date:'mediumDate'}}" [style]="{ 'margin-bottom': '2em'}">
+    <ng-template pTemplate="header">
+    </ng-template>  
+    <p-toolbar>
+        <div class="p-toolbar-group-left" style="width: 100%;">
+            <div class="grid p-fluid" style="width: 100%;">
+                <div class="col-12 md:col-6">
+                        <p-calendar [maxDate]="hoy" dateFormat="dd-mm-yy" [(ngModel)]="term" [showIcon]="true" inputId="icon"></p-calendar>
+                </div>
+                <div class="col-12 md:col-6">
+                    <button pButton pRipple type="button" (click)="obtenerFacturaDia(term)"label="Consultar" class="p-button-success ui-button"></button>
+                </div>
+            </div>
+        </div>
+    </p-toolbar>
+
+    
+<div *ngIf="facturas.length>0" class="surface-ground px-4 py-5 md:px-6 lg:px-8">
+    <div class="grid">
+        <div class="col-12 md:col-6 lg:col-4">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">Monto de EXTORNO por cuotas</span>
+                        <div class="text-900 font-medium text-xl">S/ {{totalCuotas}}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-inbox text-orange-500 text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-green-500 font-medium">Fecha: </span>
+                <span class="text-500">{{consulta | date:'mediumDate'}}</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-4">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">Monto de EXTORNO por tramites</span>
+                        <div class="text-900 font-medium text-xl">S/ {{totalTramites}}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-indigo-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-shopping-bag text-indigo-500 text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-green-500 font-medium">Fecha: </span>
+                <span class="text-500">{{consulta | date:'mediumDate'}}</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-4">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">Monto de EXTORNO por cursos</span>
+                        <div class="text-900 font-medium text-xl">S/ {{totalCursos}}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-teal-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-book text-teal-500 text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-green-500 font-medium">Fecha: </span>
+                <span class="text-500">{{consulta | date:'mediumDate'}}</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">Monto de EXTORNO por multas</span>
+                        <div class="text-900 font-medium text-xl">S/ {{totalMultas}}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-wallet text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-green-500 font-medium">Fecha: </span>
+                <span class="text-500">{{consulta | date:'mediumDate'}}</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">Monto de EXTORNO total</span>
+                        <div class="text-900 font-medium text-xl">S/ {{importeTotal }}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-pink-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-money-bill text-pink-500 text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-green-500 font-medium">Fecha: </span>
+                <span class="text-500">{{consulta | date:'mediumDate'}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+</p-card>
+<p-card header="LISTA DE FACTURAS EXTORNADAS DEL DÍA : {{consulta | date:'mediumDate'}}" [style]="{ 'margin-bottom': '2em'}">
+    <ng-template pTemplate="header"></ng-template>  
+    <p-table #dt [columns]="cols" [value]="facturas" selectionMode="multiple" [(selection)]="selectedProducts"  [paginator]="true" [rows]="10"  currentPageReportTemplate="Mostrando {first} al {last} de {totalRecords} colegiados" [rowsPerPageOptions]="[10,25,50]" [exportHeader]="'customExportHeader'">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button type="button" pButton pRipple icon="pi pi-file" (click)="dt.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+                <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"  class="p-button-success mr-2"  pTooltip="XLS" tooltipPosition="bottom"></button>
+                <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{col.header}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of columns">
+                    {{rowData[col.field]}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</p-card>

@@ -1,0 +1,91 @@
+<br>
+
+<p-toast></p-toast>
+
+<div class="card" style="padding: 0.5em 2em; background-color: #1f2d40;">
+        <h2 class="text-layout">Detalles del Curso / Diplomado: {{tramite.nombre}}</h2>
+        <hr>
+    <br>
+    <form >
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Nombre del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="nombre" [(ngModel)]="tramite.nombre" type="text" pInputText placeholder="Nombre del Curso/Diplomado" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Ponente del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="ponente" [(ngModel)]="tramite.ponente" type="text" pInputText placeholder="Nombre del Ponente" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Modalidad del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="modalidad" [(ngModel)]="tramite.modalidad" type="text" pInputText placeholder="Nombre del Ponente" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Imagen del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly  name="imagen" [(ngModel)]="tramite.imagen" type="text" pInputText placeholder="URL de imagen del Curso" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Duración del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly  name="duracion" [(ngModel)]="tramite.duracion" type="text" pInputText placeholder="Duración del Curso" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Precio del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">S/ </span>
+                    <input readonly type="number" name="precio" [(ngModel)]="tramite.precio" pInputText placeholder="Precio del tramite" autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Horario del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input  readonly name="horario" [(ngModel)]="tramite.horario" type="text" pInputText placeholder="Horario del Curso" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Fecha de inicio del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly  name="inicio" [(ngModel)]="tramite.inicio" type="text" pInputText placeholder="Feh" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Fecha de fin del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly  name="fin" [(ngModel)]="tramite.fin" type="text" pInputText placeholder="Duración del Curso" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout">Estado del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly  name="cancelado" [(ngModel)]="estado" type="text" pInputText placeholder="Duración del Curso" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout">Descripción del Curso/Diplomado: </h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-sort-alpha-down"></i></span>
+                    <textarea readonly name="descripcion" rows="3" cols="30" [(ngModel)]="tramite.descripcion" placeholder="Descripción del Curso" pInputTextarea >{{tramite.descripcion}}</textarea>         
+                </div>
+            </div>
+        </div>
+    </form>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</div>

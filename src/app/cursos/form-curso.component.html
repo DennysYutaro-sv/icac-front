@@ -1,0 +1,79 @@
+<br>
+
+<p-toast></p-toast>
+
+<div class="card" style="padding: 0.5em 2em; background-color: #1f2d40;">
+    <h2 *ngIf="!tramite.id else h2Block" class="text-layout">Crear nuevo Curso / Diplomado: </h2>
+    <ng-template #h2Block>
+        <h2 class="text-layout">Editar Curso / Diplomado: {{tramite.nombre}}</h2>
+    </ng-template>
+    <br>
+    <form >
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input name="nombre" [(ngModel)]="tramite.nombre" type="text" pInputText placeholder="Nombre del Curso/Diplomado" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input name="ponente" [(ngModel)]="tramite.ponente" type="text" pInputText placeholder="Nombre del Ponente" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <p-dropdown [options]="modalidades"  [(ngModel)]="tramite.modalidad" name="modalidad" placeholder="Seleccionar modalidad..." optionValue="nombre" optionLabel="nombre"
+                    [showClear]="true">
+                </p-dropdown>  
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input  name="imagen" [(ngModel)]="tramite.imagen" type="text" pInputText placeholder="URL de imagen del Curso" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input  name="duracion" [(ngModel)]="tramite.duracion" type="text" pInputText placeholder="Duración del Curso" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">S/ </span>
+                    <input type="number" name="precio" [(ngModel)]="tramite.precio" pInputText placeholder="Precio del tramite" autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input  name="horario" [(ngModel)]="tramite.horario" type="text" pInputText placeholder="Horario del Curso" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="field col-12 md:col-4">
+                <p-calendar name="inicio" [(ngModel)]="tramite.inicio"  dateFormat="dd/mm/yy" [showIcon]="true" inputId="icon" placeholder="Fecha de inicio del Curso"></p-calendar>
+            </div>
+            <div class="field col-12 md:col-4">
+                <p-calendar name="fin" [(ngModel)]="tramite.fin"  dateFormat="dd/mm/yy" [showIcon]="true" inputId="icon" placeholder="Fecha de fin del Curso"></p-calendar>
+            </div>
+            <div *ngIf="tramite.id" class="field col-12 md:col-4">
+                <p-selectButton name="cancelado" [options]="stateOptions" [(ngModel)]="tramite.cancelado" optionLabel="label" optionValue="value"></p-selectButton>
+            </div>
+            <div class="col-12 md:col-12">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-sort-alpha-down"></i></span>
+                    <textarea name="descripcion" rows="3" cols="30" [(ngModel)]="tramite.descripcion" placeholder="Descripción del Curso" pInputTextarea >{{tramite.descripcion}}</textarea>         
+                </div>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <button *ngIf="!tramite.id else elseBlock" pButton pRipple type="button" icon="pi pi-check" (click)="create()" class=" p-button-outlined" label="Registrar Nuevo Curso/Especialidad"></button>
+                <ng-template #elseBlock>
+                    <p-button label="Editar Colegiado" type="button" (click)="update()" icon="pi pi-user-edit" class="p-button-info p-button-outlined"></p-button>
+                </ng-template>
+            </div>
+        </div>
+    </form>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</div>

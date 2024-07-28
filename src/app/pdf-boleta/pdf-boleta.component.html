@@ -1,0 +1,17 @@
+<div class="grid grid-nogutter surface-section text-800">
+    <div class="col-12 md:col-6 p-6 text-center md:text-left flex align-items-center ">
+        <section>
+            <span class="block text-6xl font-bold mb-1">Pago éxitoso</span>
+            <div class="text-6xl text-primary font-bold mb-3">La boleta nro: {{factura.numeroBoleta}}, se realizo con éxito.</div>
+            <p class="mt-0 mb-4 text-700 line-height-3">Atención: Está es una representación gráfica de un pedido ordenado en el aplicativo Colegio de Abogados Cusco. Para más información visite el siguiente enlace: <A class="text-layout" target=_blank HREF="https://yawartech.com/"> YAWAR TECH S.A.C. 2023 </A></p> 
+            
+            <button icon="pi pi-print" (click)="imprimirBoleta(1)" pButton pRipple label="Imprimir" type="button" class="mr-3 p-button-raised"></button>
+            <button icon="pi pi-download" (click)="imprimirBoleta(2)" pButton pRipple label="Descargar" type="button" class="mr-3 p-button-raised"></button>
+            <button icon="pi pi-sign-out" [routerLink]="['/colegiados/detalle',factura.colegiado.id]" pButton pRipple label="Terminar Pago" type="button" class="p-button-outlined"></button>
+        </section>
+    </div>
+    <div  class="col-12 md:col-6 overflow-hidden">
+        <img src="/assets/exito.png" alt="Image" class="md:ml-auto block md:h-full" style="clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%)">
+    </div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</div>

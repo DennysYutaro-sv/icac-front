@@ -1,0 +1,48 @@
+<p-toast></p-toast>
+<div class="card" style="padding: 0.5em 2em; background-color: #1f2d40;">
+    <h2 *ngIf="!tramite.id else h2Block" class="text-layout">Crear nuevo tramite: </h2>
+    <ng-template #h2Block>
+        <h2 *ngIf="tramite.tipo!='cuota'" class="text-layout">Editar tramites: </h2>
+        <h2 *ngIf="tramite.tipo=='cuota'" class="text-layout">Editar la cuota mensual de los colegiados: </h2>
+    </ng-template>
+    
+    <form >
+        <div class="grid p-fluid">
+            <div *ngIf="!tramite.id || tramite.tipo!='cuota'" class="col-12 md:col-6">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-copy"></i></span>
+                    <input  name="nombre" [(ngModel)]="tramite.nombre" type="text" pInputText placeholder="Nombre del tramite" autocomplete="off" >         
+                </div>
+            </div>
+            <div hidden *ngIf="tramite.tipo=='cuota'" class="col-12 md:col-6">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-copy"></i></span>
+                    <input readonly name="nombre" [(ngModel)]="tramite.nombre" type="text" pInputText placeholder="Nombre del tramite" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">S/ </span>
+                    <input type="number" name="precio" [(ngModel)]="tramite.precio" pInputText placeholder="Precio del tramite" autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-sort-alpha-down"></i></span>
+                    <textarea name="descripcion" rows="3" cols="30" [(ngModel)]="tramite.descripcion" placeholder="Descripción del tramite" pInputTextarea >{{tramite.descripcion}}</textarea>         
+                </div>
+            </div>
+
+            
+
+            <div class="col-12 md:col-4">
+                <p-button *ngIf="!tramite.id else elseBlock" label="Registrar Tramite" (click)="create()" icon="pi pi-check"></p-button>
+                <ng-template #elseBlock>
+                    <p-button label="Editar Tramite" type="button" (click)="update()" icon="pi pi-user-edit" class="p-button-info"></p-button>
+                </ng-template>
+                
+            </div>
+        </div>
+    </form>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</div>

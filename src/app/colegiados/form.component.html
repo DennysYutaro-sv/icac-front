@@ -1,0 +1,233 @@
+<br>
+
+<p-toast  position="top-left" key="c" (onClose)="onReject()" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+        <div class="p-flex p-flex-column" style="flex: 1">
+            <div class="p-text-center">
+                <div style="margin: auto; text-align:center !important;">
+                    <i class="pi pi-check-square" style="font-size: 3rem;"></i>
+                </div>
+                
+                <h4 style="text-align:center !important;">{{message.summary}}</h4>
+                <p style="text-align:center !important;">{{message.detail}}</p>
+            </div>
+            <div class="p-grid p-fluid">
+                <div class="p-col-6">
+                    <button type="button" pButton (click)="onConfirm()" label="OK" class="p-button-success"></button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-toast>
+
+<div class="card" style="padding: 0.5em 2em; background-color: #1f2d40;">
+    <h2 *ngIf="!colegiado.id else h2Block" class="text-layout">Crear nuevo colegiado: </h2>
+    <ng-template #h2Block>
+        <h2 class="text-layout">Editar colegiado: </h2>
+        <div style="text-align: center;" >
+            <p-image *ngIf="imagenA.colegiadoId=='0'" class="center" src="/assets/perfil.png" alt="" width="200" [preview]="true"></p-image>
+            <p-image *ngIf="imagenA.colegiadoId!='0'" class="center" src="{{imagenA.url}}" alt="" width="200" [preview]="true"></p-image>
+        </div>
+        <div *ngIf="imagenA.colegiadoId!='0'" style="text-align: center;" >
+            
+            <!--<input icon="pi pi-cloud-upload"  pButton type="file" class="p-button-info p-button-sm p-button-outlined mr-2" label="Actualizar foto" id="imagen" #imagenInputFile
+                    (change)="onFileChange($event)" accept="image/png, image/jpeg, image/gif">-->
+            <button pTooltip="Tienes que Eliminar la foto para poder actualizar la foto del colegiado." type="button" pButton (click)="updateImagen()" icon="pi pi-trash"  label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eliminar foto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" class="p-button-danger p-button-outlined"></button>
+        </div>
+        <br>
+    </ng-template>
+
+
+    <br>
+    
+    <form (ngSubmit)="create()" enctype="multipart/form-data">
+        <div class="grid p-fluid">
+
+            <div *ngIf="!colegiado.id" class="col-12 md:col-12">
+                <div class="custom-file " >
+                    <input   pButton  type="file" class="p-button-info p-button-sm p-button-outlined" id="imagen" #imagenInputFile
+                    (change)="onFileChange($event)" accept="image/png, image/jpeg, image/gif">
+                    <label class="p-inputgroup-addon" for="imagen">Subir foto de perfil del colegiado</label>
+                </div>
+                <div *ngIf="imagen" class="col-12 md:col-12">
+                    <h5 class="text-layout">Foto del colegiado: </h5>
+                    <div style="text-align: center;">
+                        <p-image style="z-index: 100;" class="center" src="{{imagenMin}}" alt="" width="200" [preview]="true"></p-image>
+                    </div>
+                </div>
+                <div class="form-group d-flex justify-content-between my-3">
+                    <!--<button type="submit" class="btn btn-outline-success" [disabled]="!imagen"><i class="fas fa-upload"></i> Subir</button>-->
+                    <button pButton class="p-button-warning p-button-sm p-button-outlined" [disabled]="!imagen" (click)="reset()"><i class="fas fa-sync-alt"></i> Quitar foto del colegiado</button>
+                </div>
+            </div>
+            <div *ngIf="imagenA.colegiadoId=='0'" class="col-12 md:col-12">
+                <div class="custom-file">
+                    <input  pButton type="file" class="p-button-info p-button-sm p-button-outlined" id="imagen" #imagenInputFile
+                    (change)="onFileChange($event)" accept="image/png, image/jpeg, image/gif">
+                    <label class="p-inputgroup-addon" for="imagen">Actualizar foto de perfil</label>
+                </div>
+                <div *ngIf="imagen" class="col-12 md:col-12">
+                    <h5 class="text-layout">Foto del colegiado: </h5>
+                    <div style="text-align: center;">
+                        <p-image   class="center" src="{{imagenMin}}" alt="" width="200" [preview]="true"></p-image>
+                    </div>
+                </div>
+                <div class="form-group d-flex justify-content-between my-3">
+                    <!--<button type="submit" class="btn btn-outline-success" [disabled]="!imagen"><i class="fas fa-upload"></i> Subir</button>-->
+                    <button pButton class="p-button-warning p-button-sm p-button-outlined" [disabled]="!imagen" (click)="reset()"><i class="fas fa-sync-alt"></i> Quitar foto del colegiado</button>
+                </div>
+            </div>
+            <div  class="col-12 md:col-12">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left" style="width: 100%;">
+                        <div class="col-12 md:col-12">
+                            <div class="p-inputgroup">
+                                <button (click)="consultarReniec(dniConsulta)" type="button" pButton pRipple label="Consultar DNI en la RENIEC"></button>
+                                <input (keyup.enter)="onKeyUp(dniConsulta)" type="text" [(ngModel)]="dniConsulta" pInputText placeholder="Ingrese DNI">
+                            </div>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="colegiatura" [(ngModel)]="colegiado.colegiatura" type="text" pInputText placeholder="Colegiatura" autocomplete="off" >         
+                </div>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-id-card"></i></span>
+                    <input type="text" name="dni"  [(ngModel)]="colegiado.dni" pInputText placeholder="DNI del colegiado" autocomplete="off">         
+                </div>
+            </div>
+
+            <div class="field col-12 md:col-4">
+                <p-calendar name="fechaColegiatura" [(ngModel)]="colegiado.fechaColegiatura"  dateFormat="dd/mm/yy" [showIcon]="true" inputId="icon" placeholder="Fecha de colegiatura"></p-calendar>
+            </div>
+
+            
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input type="text" name="nombre"  [(ngModel)]="colegiado.nombre" pInputText placeholder="Nombres" autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input type="text" name="apellido"  [(ngModel)]="colegiado.apellido"  pInputText placeholder="Apellidos" autocomplete="off">         
+                </div>
+            </div>
+            
+            <div class="field col-12 md:col-4">
+                <p-calendar name="nacimiento" [(ngModel)]="colegiado.nacimiento" dateFormat="dd/mm/yy" [showIcon]="true" inputId="icon" placeholder="Fecha de nacimiento"></p-calendar>
+            </div>
+                    
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-map-marker"></i></span>
+                    <input type="text" name="departamento" [(ngModel)]="colegiado.departamento" pInputText placeholder="Departamento" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-map-marker"></i></span>
+                    <input type="text" name="provincia" [(ngModel)]="colegiado.provincia" pInputText placeholder="Provincia" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-map-marker"></i></span>
+                    <input type="text" name="distrito" [(ngModel)]="colegiado.distrito" pInputText placeholder="Distrito" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-map"></i></span>
+                    <input type="text" name="domicilio" [(ngModel)]="colegiado.domicilio" pInputText placeholder="Dirección de domicilio" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-briefcase"></i></span>
+                    <input type="text" name="trabajo" [(ngModel)]="colegiado.trabajo" pInputText placeholder="Dirección de trabajo" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">@</span>
+                    <input type="text" name="correo" [(ngModel)]="colegiado.correo" pInputText placeholder="Correo electrónico" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+                    <input type="text" name="telefono" [(ngModel)]="colegiado.telefono" pInputText placeholder="Telefono" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+                    <input type="text" name="telefono2" [(ngModel)]="colegiado.telefono2" pInputText placeholder="Telefono de trabajo" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <p-dropdown [options]="tiposSexo"  [(ngModel)]="colegiado.sexo" name="sexo" placeholder="Seleccionar sexo..." optionValue="nombre" optionLabel="nombre"
+                    [showClear]="true">
+                </p-dropdown>  
+            </div>
+
+
+            <div class="col-12 md:col-4">
+                <p-dropdown [options]="universidades" [(ngModel)]="colegiado.universidad" name="universidad" placeholder="Seleccionar universidad" optionLabel="nombre"
+        [showClear]="true"></p-dropdown>
+            </div>
+            <div class="col-12 md:col-4">
+                <p-dropdown [options]="habilidades" [(ngModel)]="colegiado.habilidad" name="habilidad" placeholder="Seleccionar habilidad" optionLabel="nombre"
+        [showClear]="true"></p-dropdown>
+            </div>
+            <div  class="col-12 md:col-4">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-id-card"></i></span>
+                    <input type="text" name="fechaFallecimiento" [(ngModel)]="colegiado.fechaFallecimiento" pInputText placeholder="Fecha de fallecimiento" autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-file"></i></span>    
+                    <textarea name="lm" rows="3" cols="30" [(ngModel)]="colegiado.lm" placeholder="Resoluciones" pInputTextarea autocomplete="off">{{colegiado.lm}}</textarea> 
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-file"></i></span>    
+                    <textarea name="otros" rows="3" cols="30" [(ngModel)]="colegiado.otros" placeholder="Datos extra" pInputTextarea autocomplete="off">{{colegiado.otros}}</textarea> 
+                </div>
+            </div>
+            
+            <div class="col-12 md:col-4">
+                <p-button type="ngSubmit" *ngIf="!colegiado.id else elseBlock" label="Registrar Colegiado" icon="pi pi-check"></p-button>
+                <ng-template #elseBlock>
+                    <p-button label="Editar Colegiado" type="button" (click)="update()" icon="pi pi-user-edit" class="p-button-info"></p-button>
+                </ng-template>
+            </div>
+        </div>
+    </form>
+    <br>
+    <div style="position: relative;bottom: 0;"class="bg-bluegray-900 text-gray-100 p-3 flex justify-content-between lg:justify-content-center align-items-center flex-wrap">
+        <div class="font-bold mr-8">🔥 YAWAR TECH SAC</div>
+        <div class="align-items-center hidden lg:flex">
+            <span class="line-height-3">Equipo de contacto Yawar Tech SAC - 938 863 181.</span>
+        </div>
+        <a class="flex align-items-center ml-2 mr-8">
+            <a class="text-white" target="_blank" href="https://yawartech.com/"><span class="underline font-bold">Conócenos</span></a>
+        </a>
+        <a pRipple class="flex align-items-center no-underline justify-content-center border-circle text-gray-50 hover:bg-bluegray-700 cursor-pointer transition-colors transition-duration-150" style="width:2rem; height: 2rem">
+            <i class="pi pi-times"></i>
+        </a>
+    </div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</div>

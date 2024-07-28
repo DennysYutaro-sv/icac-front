@@ -1,0 +1,74 @@
+<p-card header="PORTAL AGREMIADO: BUSCAR CREDENCIALES DEL AGREMIADO" [style]="{ 'margin-bottom': '2em','text-align': 'center'}">
+    <ng-template pTemplate="header">
+    </ng-template>  
+    <p-toolbar>
+        <div class="p-toolbar-group-left" style="width: 100%;">
+            <div class="grid p-fluid" style="width: 100%;">
+                <div class="col-12 md:col-6">
+                        <input type="number" name="term" [(ngModel)]="term" pInputText placeholder="Ingrese la colegiatura del colegiado: 123..." autocomplete="off">
+                </div>
+                <div class="col-12 md:col-6">
+                    <button icon="pi pi-search"  pButton pRipple type="button" (click)="buscarAgremiado(term)" label="Buscar CREDENCIALES del colegiado"class="p-button-warning p-button-outlined ui-button"></button>
+                </div>
+            </div>
+        </div>
+    </p-toolbar>
+</p-card>
+<p-card *ngIf="credencialAgremiado.length>0" class="flex justify-content-center" [style]="{width: '90%'}" styleClass="p-card-shadow">
+    <div class="card" style="padding: 0.5em 2em; background-color: #1f2d40">
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <h2 class="text-layout">CREDENCIALES DEL COLEGIADO: {{credencialAgremiado[1]}} {{credencialAgremiado[2]}} - {{credencialAgremiado[0]}}</h2>
+            </div>
+        </p-toolbar>
+        <br>
+    </div>
+    <form #facturaForm="ngForm">
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Colegiatura</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="colegiatura" pInputText type="text" [(ngModel)]="credencialAgremiado[0]" required pInputText  autocomplete="off"> 
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Nombre</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="nombre" pInputText type="text" [(ngModel)]="credencialAgremiado[1]" required pInputText  autocomplete="off"> 
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Apellidos</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="apellido" type="text" [(ngModel)]="credencialAgremiado[2]" required pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Correo electrónico</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="correo" type="text" [(ngModel)]="credencialAgremiado[3]" required pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Usuario del Portal</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="usuario" type="text"  [(ngModel)]="credencialAgremiado[4]" required pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Contraseña del Portal</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly name="password" type="text" [(ngModel)]="credencialAgremiado[5]" required pInputText autocomplete="off">         
+                </div>
+            </div>
+        <br>
+        </div>
+    </form>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</p-card>

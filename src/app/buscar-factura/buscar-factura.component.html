@@ -1,0 +1,188 @@
+<p-card header="BUSCAR BOLETA EMITADA" [style]="{ 'margin-bottom': '2em','text-align': 'center'}">
+    <ng-template pTemplate="header">
+    </ng-template>  
+    <p-toolbar>
+        <div class="p-toolbar-group-left" style="width: 100%;">
+            <div class="grid p-fluid" style="width: 100%;">
+                <div class="col-12 md:col-6">
+                        <input type="text" name="term" [(ngModel)]="term" pInputText placeholder="Ingrese el número de boleto: B001-9999..." autocomplete="off">
+                </div>
+                <div class="col-12 md:col-6">
+                    <button icon="pi pi-search"  pButton pRipple type="button" (click)="buscarFactura(term)" label="Buscar Boleta por su Número" class="p-button-warning p-button-outlined ui-button"></button>
+                </div>
+            </div>
+        </div>
+    </p-toolbar>
+</p-card>
+<p-card *ngIf="factura.id" class="flex justify-content-center" [style]="{width: '90%'}" styleClass="p-card-shadow">
+    <div class="card" style="padding: 0.5em 2em; background-color: #1f2d40">
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <h2 *ngIf="factura.tipo == 'cuota'" class="text-layout">PAGO DE CUOTAS : {{factura.numeroBoleta}} | Estado: <p-tag icon="pi pi-check" *ngIf="factura.cancelado==false" value="NORMAL" severity="success" ></p-tag> <p-tag icon="pi pi-exclamation-triangle" *ngIf="factura.cancelado==true" value="EXTORNADO - CANCELADO" severity="danger" ></p-tag> </h2>
+                <h2 *ngIf="factura.tipo == 'tramite'" class="text-layout">PAGO DE TRAMITES  : {{factura.numeroBoleta}} | Estado: <p-tag icon="pi pi-check" *ngIf="factura.cancelado==false" value="NORMAL" severity="success" ></p-tag> <p-tag icon="pi pi-exclamation-triangle" *ngIf="factura.cancelado==true" value="EXTORNADO - CANCELADO" severity="danger" ></p-tag></h2>
+                <h2 *ngIf="factura.tipo == 'multa'" class="text-layout">PAGO DE MULTAS : {{factura.numeroBoleta}} | Estado: <p-tag icon="pi pi-check" *ngIf="factura.cancelado==false" value="NORMAL" severity="success" ></p-tag> <p-tag icon="pi pi-exclamation-triangle" *ngIf="factura.cancelado==true" value="EXTORNADO - CANCELADO" severity="danger" ></p-tag></h2>
+                <h2 *ngIf="factura.tipo == 'curso'" class="text-layout">PAGO DE CURSOS : {{factura.numeroBoleta}} | Estado: <p-tag icon="pi pi-check" *ngIf="factura.cancelado==false" value="NORMAL" severity="success" ></p-tag> <p-tag icon="pi pi-exclamation-triangle" *ngIf="factura.cancelado==true" value="EXTORNADO - CANCELADO" severity="danger" ></p-tag></h2>
+            </div>
+            <div class="p-toolbar-group-right">
+                <button icon="pi pi-download" (click)="imprimirBoleta(2)" pButton pRipple label="Descargar Boleta" type="button" class="mr-3 p-button-info p-button-outlined ui-button"></button>
+            </div>
+        </p-toolbar>
+        <br>
+    </div>
+    <form #facturaForm="ngForm">
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Folio</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly pInputText type="text" name="id" [(ngModel)]="factura.id" required pInputText  autocomplete="off"> 
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Serie</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly pInputText type="text" name="serie" [(ngModel)]="factura.serie" required pInputText  autocomplete="off"> 
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Número de boleta</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="numeroBoleta" [(ngModel)]="factura.numeroBoleta" required pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div *ngIf="factura.colegiado.habilidad.nombre!='EXTERNO'" class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;"> Datos del colegiado</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="colegiado"  pInputText  value="{{factura.colegiado.nombre}} {{factura.colegiado.apellido}}">         
+                </div>
+            </div>
+            <div *ngIf="factura.colegiado.habilidad.nombre!='EXTERNO'" class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Personal que atendio al colegiado</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="responsable" [(ngModel)]="factura.responsable"  pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4" *ngIf="factura.colegiado.habilidad.nombre!='EXTERNO'">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Filial donde se realizo el Pago</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="filial" [(ngModel)]="filialCole"  pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Fecha de pago</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly pInputText type="text" name="fechaPago" [(ngModel)]="factura.fechaPago" required pInputText  autocomplete="off"> 
+                </div>
+            </div>
+            
+            
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Método de pago</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="formaPago" [(ngModel)]="factura.formaPago" required pInputText autocomplete="off">
+                </div>
+            </div>
+
+            <div class="col-12 md:col-4" *ngIf="factura.colegiado.habilidad.nombre!='EXTERNO'">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Número de transacción (no obligatorio)</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="numeroTransaccion" [(ngModel)]="factura.numeroTransaccion"  pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4" *ngIf="factura.colegiado.habilidad.nombre=='EXTERNO'">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Filial donde se realizo el Pago</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="filial" [(ngModel)]="filialCole"  pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4" *ngIf="factura.colegiado.habilidad.nombre=='EXTERNO'">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Nombre del cliente externo</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="numeroTransaccion" [(ngModel)]="factura.numeroTransaccion"  pInputText autocomplete="off">         
+                </div>
+            </div>
+            <div *ngIf="factura.colegiado.habilidad.nombre=='EXTERNO'" class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">DNI del cliente cliente externo</h4>
+                <div class="p-inputgroup">
+                    <textarea readonly name="observacion" rows="1" cols="30" [(ngModel)]="factura.observacion" pInputTextarea ></textarea>
+                </div>
+            </div>
+            <div *ngIf="factura.colegiado.habilidad.nombre=='EXTERNO'" class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Personal que atendio al colegiado</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="responsable" [(ngModel)]="factura.responsable"  pInputText autocomplete="off">         
+                </div>
+            </div>
+
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Resoluciones (no obligatorio)</h4>
+                <div class="p-inputgroup">
+                    <textarea readonly name="resolucion" rows="2" cols="30" [(ngModel)]="factura.resolucion" pInputTextarea></textarea>
+                </div>
+            </div>
+            <div *ngIf="factura.colegiado.habilidad.nombre!='EXTERNO'" class="col-12 md:col-12">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Observaciones (no obligatorio)</h4>
+                <div class="p-inputgroup">
+                    <textarea readonly name="observacion" rows="2" cols="30" [(ngModel)]="factura.observacion" pInputTextarea ></textarea>
+                </div>
+            </div>
+            
+            <div class="col-12 md:col-12">
+                <h3 style="margin-bottom: 0;">Detalles de la Boleta</h3>
+                <hr>
+                <p-table responsiveLayout="scroll" [value]="factura.items">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th *ngIf="factura.tipo=='cuota'">Cuota</th>
+                            <th *ngIf="factura.tipo=='multa'">Multa</th>
+                            <th *ngIf="factura.tipo=='tramite'">Tramite</th>
+                            <th *ngIf="factura.tipo=='curso'">Curso</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>sub Total</th>
+                        </tr>
+                        
+                    </ng-template>
+       
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td *ngIf="item.tramite.nombre == '~#Cuota'">CUOTA</td>
+                            <td *ngIf="item.tramite.nombre != '~#Cuota'">{{item.tramite.nombre}}</td>
+                            <td> {{item.tramite.descripcion}}</td>
+                            <td>S/ {{item.valor}}</td>
+                            <td *ngIf="item.tramite.nombre == '~#Cuota'">{{item.cantidad}} meses</td>
+                            <td *ngIf="item.tramite.nombre != '~#Cuota'">{{item.cantidad}}</td>
+                            <td>S/ {{item.importe}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+            </div>
+        </div>
+        <p-toolbar *ngIf="factura.items.length>0">
+            <div class="p-toolbar-group-right">
+                <h4 style="text-align: left;" class="text-layout">Descuento : S/ - {{ factura.descuento }} </h4>
+            </div>
+        </p-toolbar>
+        <p-toolbar *ngIf="factura.items.length>0">
+            <div class="p-toolbar-group-right">
+                <h2 style="text-align: left;" class="text-layout">TOTAL : S/ {{ factura.total }} </h2>
+            </div>
+        </p-toolbar>
+    </form>
+
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</p-card>
+<br>

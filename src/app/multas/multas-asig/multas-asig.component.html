@@ -1,0 +1,37 @@
+<br>
+<p-card header="MULTA: {{multa.nombre}}" [style]="{ 'margin-bottom': '2em'}">
+    <ng-template pTemplate="header">
+    </ng-template>  
+    <p-toolbar>
+        <div class="p-toolbar-group-left">
+                <div class="p-col-12 p-md-6">
+                    <div  class="p-inputgroup">
+                        <button [disabled]="isDisabled" (click)="cargarMultasAsignadas(multa.id)" pButton pRipple type="button"  label="Cargar colegiados asignados con la  multa" class="p-button-secondary ui-button"></button>         
+                    </div>
+                </div>
+        </div>
+    </p-toolbar>
+    <div class="card">
+        <h5>DESCRIPCION DE LA MULTA: {{multa.descripcion}}</h5>
+        <p-table [value]="multasAsig" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+            currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} multas" [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Colegiatura</th>
+                    <th>Nombre</th>
+                    <th>Detalle</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-multaAsig>
+                <tr>
+                    <td>{{multaAsig.colegiatura}}</td>
+                    <td>{{multaAsig.nombre}}</td>
+                    <td *ngIf="multaAsig.pagado==0"><button  pButton class="p-button-danger" type="button" label="&nbsp;&nbsp;EL COLEGIADO DEBE S/ {{multa.precio}}.00&nbsp;&nbsp;" ></button></td>
+                    <td *ngIf="multaAsig.pagado==1"><button pButton type="button" label="EL COLEGIADO PAGO LA MULTA" ></button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</p-card>
+<br>

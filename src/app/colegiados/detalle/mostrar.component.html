@@ -1,0 +1,192 @@
+<br>
+    
+    <div class="card" style="padding: 0.5em 2em; background-color: #1f2d40;">
+        <p-toolbar *ngIf="colegiado.habilidad.nombre!='EXTERNO'">
+            <div class="p-toolbar-group-left">
+                <h2 class="text-layout">COLEGIADO: {{colegiado.nombre}} {{colegiado.apellido}} </h2>
+            </div>
+            
+            <div class="p-toolbar-group-right">
+                <p-button [routerLink]="['/colegiados']" icon="pi pi-times" styleClass="p-button-danger"></p-button>
+            </div>
+        </p-toolbar>
+        <br>
+        
+        <div class="grid p-fluid" *ngIf="colegiado.habilidad.nombre!='EXTERNO'">
+            <div class="col-12 md:col-12">
+                <div style="text-align: center;" >
+                    <p-image *ngIf="imagenA.colegiadoId=='0'" class="center" src="/assets/perfil.png" alt="" width="200" [preview]="true"></p-image>
+                    <p-image *ngIf="imagenA.colegiadoId!='0'" class="center" src="{{imagenA.url}}" alt="" width="200" [preview]="true"></p-image>
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Número de colegiatura</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-sort-numeric-up"></i></span>
+                    <input readonly name="colegiatura" [(ngModel)]="colegiado.colegiatura" type="text" pInputText placeholder="Colegiatura" autocomplete="off" >         
+                </div>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Número de DNI</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-id-card"></i></span>
+                    <input readonly type="text" name="dni" [(ngModel)]="colegiado.dni" pInputText placeholder="DNI del colegiado" autocomplete="off">         
+                </div>
+            </div>
+
+            <div class="field col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Fecha de colegiatura</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
+                    <input readonly type="text" name="fechaColegiatura" value="{{colegiado.fechaColegiatura  |date:'dd/MM/yyyy' }}"  pInputText autocomplete="off">
+                </div>
+            </div>
+
+            
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Nombre</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="nombre" [(ngModel)]="colegiado.nombre" pInputText placeholder="Nombres" autocomplete="off">         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Apellidos</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="apellido" [(ngModel)]="colegiado.apellido"  pInputText placeholder="Apellidos" autocomplete="off">         
+                </div>
+            </div>
+            
+            <div class="field col-12 md:col-4" >
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Fecha de nacimiento</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
+                    <input readonly type="text" name="nacimiento" value="{{colegiado.nacimiento|date:'dd/MM/yyyy' }}"  pInputText autocomplete="off">
+                </div>
+            </div>
+                    
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Departamento</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-map-marker"></i></span>
+                    <input readonly type="text" name="departamento" [(ngModel)]="colegiado.departamento" pInputText placeholder="Departamento" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Provincia</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-map-marker"></i></span>
+                    <input readonly type="text" name="provincia" [(ngModel)]="colegiado.provincia" pInputText placeholder="Provincia" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Distrito</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-map-marker"></i></span>
+                    <input readonly type="text" name="distrito" [(ngModel)]="colegiado.distrito" pInputText placeholder="Distrito" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Dirección de domicilio</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-map-marker"></i></span>
+                    <input readonly type="text" name="domicilio" [(ngModel)]="colegiado.domicilio" pInputText placeholder="Domicilio" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Dirección de trabajo</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-map-marker"></i></span>
+                    <input readonly type="text" name="trabajo" [(ngModel)]="colegiado.trabajo" pInputText placeholder="trabajo" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Correo electrónico</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">@</span>
+                    <input readonly type="text" name="correo" [(ngModel)]="colegiado.correo" pInputText  autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Telefono</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+                    <input readonly type="text" name="telefono" [(ngModel)]="colegiado.telefono" pInputText placeholder="Telefono" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Segundo Telefono</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+                    <input type="text" name="telefono2" [(ngModel)]="colegiado.telefono2" pInputText placeholder="Segundo Telefono" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Sexo</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly type="text" name="sexo" [(ngModel)]="colegiado.sexo" pInputText placeholder="sexo" autocomplete="off">         
+                </div>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Universidad</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-building"></i></span>
+                    <input readonly type="text" name="universidad"  value="{{colegiado.universidad.nombre}}" pInputText placeholder="Colegiatura" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Habilidad</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-users"></i></span>
+                    <input readonly type="text" name="habilidad"  value="{{colegiado.habilidad.nombre}}"  pInputText placeholder="Colegiatura" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Fecha de fallecimiento</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-file"></i></span>
+                    <input readonly type="text" name="fechaFallecimiento" [(ngModel)]="colegiado.fechaFallecimiento" pInputText  autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Personal que actualizo última vez al colegiado</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-file"></i></span>
+                    <input readonly type="text" name="actualizador" [(ngModel)]="colegiado.actualizador" pInputText  autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Resoluciones del colegiado</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-file"></i></span>    
+                    <textarea name="lm" rows="3" cols="30" [(ngModel)]="colegiado.lm" placeholder="Resoluciones" pInputTextarea autocomplete="off">{{colegiado.lm}}</textarea> 
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Datos extra</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-file"></i></span>    
+                    <textarea name="otros" rows="3" cols="30" [(ngModel)]="colegiado.otros" placeholder="Datos extras(Observaciones,fecha de inicio de fraccionamiento,etc.)"  pInputTextarea autocomplete="off">{{colegiado.otros}}</textarea> 
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+    
+    <div style="position: relative;bottom: 0;" class="bg-bluegray-900 text-gray-100 p-3 flex justify-content-between lg:justify-content-center align-items-center flex-wrap">
+        <div class="font-bold mr-8">🔥 YAWAR TECH SAC</div>
+        <div class="align-items-center hidden lg:flex">
+            <span class="line-height-3">Equipo de contacto Yawar Tech SAC - 938 863 181.</span>
+        </div>
+        <a class="flex align-items-center ml-2 mr-8">
+            <a class="text-white" target="_blank" href="https://yawartech.com/"><span class="underline font-bold">Conócenos</span></a>
+        </a>
+        <a pRipple class="flex align-items-center no-underline justify-content-center border-circle text-gray-50 hover:bg-bluegray-700 cursor-pointer transition-colors transition-duration-150" style="width:2rem; height: 2rem">
+            <i class="pi pi-times"></i>
+        </a>
+    </div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>

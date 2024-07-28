@@ -1,0 +1,103 @@
+<p-toast></p-toast>
+<div class="card" style="padding: 0.5em 2em; background-color: #1f2d40;">
+    <h2 *ngIf="!usuario.id else h2Block" class="text-layout">Crear nuevo usuario: </h2>
+    <ng-template #h2Block>
+        <h2 class="text-layout">Editar usuario: </h2>
+    </ng-template>
+    
+    <form >
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">Username</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-copy"></i></span>
+                    <input  name="username" [(ngModel)]="usuario.username" type="text" pInputText placeholder="Username del usuario" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">Nombre</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-copy"></i></span>
+                    <input  name="nombre" [(ngModel)]="usuario.nombre" type="text" pInputText placeholder="Nombre del usuario" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">Apellido</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-copy"></i></span>
+                    <input  name="apellido" [(ngModel)]="usuario.apellido" type="text" pInputText placeholder="Apellido del usuario" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">DNI</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-copy"></i></span>
+                    <input  name="dni" [(ngModel)]="usuario.dni" type="number" pInputText placeholder="DNI del usuario" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">Email</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-copy"></i></span>
+                    <input  name="email" [(ngModel)]="usuario.email" type="text" pInputText placeholder="Email del usuario" autocomplete="off" >         
+                </div>
+            </div>
+
+            <div  class="col-12 md:col-4" *ngIf="usuario.roles.length==2">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">Rol Actual</h4>
+                <div  class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+                    <input *ngIf="rolesCargar[1].id == 2" readonly type="text" name="roles" [(ngModel)]="roles[0].name" pInputText placeholder="Rol" autocomplete="off">
+                    <input *ngIf="rolesCargar[1].id == 3" readonly type="text" name="roles" [(ngModel)]="roles[1].name" pInputText placeholder="Rol" autocomplete="off"> 
+                    <input *ngIf="rolesCargar[1].id == 4" readonly type="text" name="roles" [(ngModel)]="roles[2].name" pInputText placeholder="Rol" autocomplete="off"> 
+                    <input *ngIf="rolesCargar[1].id == 5" readonly type="text" name="roles" [(ngModel)]="roles[3].name" pInputText placeholder="Rol" autocomplete="off">       
+                </div>
+            </div>
+            
+            <div  *ngIf="!usuario.id"  class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">Contraseña</h4>
+                <div class="card" >
+                    <p-password read placeholder="Contraseña del usuario..." name="password" [(ngModel)]="usuario.password" [toggleMask]="true"></p-password>
+                </div>
+            </div>
+            <div *ngIf="usuario.id" hidden  class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">Contraseña</h4>
+                <div  class="card" >
+                    <p-password  placeholder="Contraseña del usuario..." name="password" [(ngModel)]="usuario.password" [toggleMask]="true"></p-password>
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">Filial del Usuario</h4>
+                <p-dropdown [options]="tiposFilial"  [(ngModel)]="usuario.filial" name="filial" placeholder="Seleccionar filiar del trabajador..." optionValue="valor" optionLabel="nombre"
+                    [showClear]="true">
+                </p-dropdown>  
+            </div>
+            <div class="col-12 md:col-6">
+                <h4 class="text-layout" style="padding: 5px !important;margin: 0px;">Estado</h4>
+                <p-dropdown [options]="activos"  [(ngModel)]="usuario.enabled" name="enabled" placeholder="¿Está ACTIVO?" optionValue="valor" optionLabel="nombre"
+                    [showClear]="true">
+                </p-dropdown>  
+            </div>
+            <div class="col-12 md:col-12">
+                <div class="field">
+                    <h3 *ngIf="usuario.roles.length!=2" class="text-layout" >ASIGNARLE UN ROL:</h3>
+                    <h3 *ngIf="usuario.roles.length==2" class="text-layout" >ASIGNARLE UN NUEVO ROL:</h3>
+                <div *ngFor="let rol of roles" class="p-field-checkbox">
+                    <p-radioButton [inputId]="rol.key" name="rol" [value]="rol" [(ngModel)]="selectedRol"
+                        ></p-radioButton>
+                    <label [for]="rol.key" class="text-layout mr-2">{{rol.name}}</label>
+                </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <button *ngIf="!usuario.id else elseBlock" pButton pRipple type="button" label="Registrar Usuario" (click)="create()"  class="p-button-outlined"></button>
+                <ng-template #elseBlock>
+                    <button pButton pRipple type="button" label="Editar Usuario" (click)="update()"  class="p-button-outlined p-button-warning"></button>
+                </ng-template>
+                
+            </div>
+            
+        </div>
+    </form>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</div>

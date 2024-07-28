@@ -1,0 +1,157 @@
+<br>
+    
+    <div class="card" style="padding: 0.5em 2em; background-color: #1f2d40;">
+        <p-toolbar *ngIf="colegiado.habilidad.nombre!='EXTERNO'">
+            <div class="p-toolbar-group-left">
+                <h2 class="text-layout">BOLETAS DEL COLEGIADO: {{colegiado.nombre}} {{colegiado.apellido}} </h2>
+            </div>
+            
+            <div class="p-toolbar-group-right">
+                <p-button [routerLink]="['/colegiados']" icon="pi pi-times" styleClass="p-button-danger"></p-button>
+            </div>
+        </p-toolbar>
+        <p-messages severity="warn" *ngIf="colegiado.habilidad.nombre=='ACTIVO CON FRACCIONAMIENTO'">
+            <ng-template pTemplate>
+                <div class="ml-4">El colegiado se encuentra en<b> < {{colegiado.habilidad.nombre}} > </b>, por favor verificar si el colegiado cumplio con el compromiso de su pagó, caso contrario editar su estado a HABILITADO.&nbsp;&nbsp;</div>
+                <p-tag styleClass="mr-2" severity="danger" value="{{colegiado.habilidad.nombre}}"></p-tag>
+            </ng-template>
+        </p-messages>
+        <br>
+        <div class="grid p-fluid" *ngIf="colegiado.habilidad.nombre!='EXTERNO'">
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Número de colegiatura</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-sort-numeric-up"></i></span>
+                    <input readonly name="colegiatura" [(ngModel)]="colegiado.colegiatura" type="text" pInputText placeholder="Colegiatura" autocomplete="off" >         
+                </div>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Número de DNI</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-id-card"></i></span>
+                    <input readonly type="text" name="dni" [(ngModel)]="colegiado.dni" pInputText placeholder="DNI del colegiado" autocomplete="off">         
+                </div>
+            </div>
+
+            <div class="field col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Fecha de colegiatura</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
+                    <input readonly type="text" name="fechaColegiatura" value="{{colegiado.fechaColegiatura  |date:'dd/MM/yyyy' }}"  pInputText autocomplete="off">
+                </div>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Correo electrónico</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">@</span>
+                    <input readonly type="text" name="correo" [(ngModel)]="colegiado.correo" pInputText  autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Telefono</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+                    <input readonly type="text" name="telefono" [(ngModel)]="colegiado.telefono" pInputText placeholder="Telefono" autocomplete="off">      
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Habilidad</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-users"></i></span>
+                    <input readonly type="text" name="habilidad"  value="{{colegiado.habilidad.nombre}}"  pInputText placeholder="Colegiatura" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Resoluciones del colegiado</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-file"></i></span>    
+                    <textarea readonly name="lm" rows="3" cols="30" [(ngModel)]="colegiado.lm"  pInputTextarea autocomplete="off">{{colegiado.lm}}</textarea> 
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <h4 class="text-layout" style="padding: 0 !important;margin: 0px;">Datos extras(Observaciones,fecha de inicio de fraccionamiento,etc.)</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-file"></i></span>    
+                    <textarea readonly name="otros" rows="3" cols="30" [(ngModel)]="colegiado.otros" pInputTextarea autocomplete="off">{{colegiado.otros}}</textarea> 
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <p-toolbar *ngIf="colegiado.habilidad.nombre!='EXTERNO'">
+            <div class="p-toolbar-group-left">
+                <h2 class="text-layout">BOLETAS DEL COLEGIADO</h2>
+            </div>
+            
+            <div  class="p-toolbar-group-right">
+                <button pButton pRipple [routerLink]="['/pagos',colegiado.id]" label="&nbsp;Seguir Pagando&nbsp;" class="p-button-outlined p-button-success mr-2" icon="pi pi-shopping-cart"></button>
+            </div>
+        </p-toolbar>
+        <p-toolbar *ngIf="colegiado.habilidad.nombre=='EXTERNO'">
+            <div class="p-toolbar-group-left">
+                <h2 class="text-layout">BOLETAS DE CLIENTES EXTERNOS</h2>
+            </div>
+            
+            <div  class="p-toolbar-group-right">
+                <button icon="pi pi-shopping-cart"  pButton pRipple type="button" [routerLink]="['/pagos',0]" label="Pagos clientes externos" class="p-button-outlined p-button-warning ui-button"></button>
+            </div>
+        </p-toolbar>
+
+        <p-messages *ngIf="facturas.length==0" severity="info">
+            <ng-template pTemplate>
+                <div class="ml-4">El colegiado <b> < {{colegiado.nombre}} {{colegiado.apellido}} > </b> no tiene facturas asignadas. &nbsp;&nbsp;</div>
+            </ng-template>
+        </p-messages>
+
+        <!--BOLETAS DE CLIENTE UNICO-->
+        <!--BOLETAS DE CLIENTES EXTERNOS-->
+        <p-table *ngIf="facturas.length>0" #dt [rows]="10" [value]="facturas" [paginator]="true"   responsiveLayout="scroll" [globalFilterFields]="['numeroTransaccion','observacion']" responsiveLayout="scroll"[rowHover]="true" dataKey="id"
+            currentPageReportTemplate="Mostramos {first} al {last} de {totalRecords} facturas externas" [showCurrentPageReport]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Nro. de Boleta</th>
+                    <th>Cliente</th>
+                    <th>Dni</th>
+                    <th>Descripción</th>
+                    <th>Responsable</th>
+                    <th>Fecha y Hora</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Detalle</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="caption">
+                <div class="flex align-items-center justify-content-between">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText #textInput type="text" (input)="dt.filterGlobal(textInput.value, 'contains')" placeholder="Buscar cliente externo..." />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="body" let-factura>
+                <tr>
+                    <td>{{factura.numeroBoleta}}</td>
+                    <td *ngIf="colegiado.habilidad.nombre=='EXTERNO'">{{factura.numeroTransaccion}}</td>
+                    <td *ngIf="colegiado.habilidad.nombre!='EXTERNO'">{{colegiado.nombre}}</td>
+                    <td *ngIf="colegiado.habilidad.nombre=='EXTERNO'">{{factura.observacion}}</td>
+                    <td *ngIf="colegiado.habilidad.nombre!='EXTERNO'">{{colegiado.dni}}</td>
+                    <td *ngIf="factura.tipo== 'cuota'">PAGO DE CUOTA</td>
+                    <td *ngIf="factura.tipo== 'tramite'">PAGO DE TRAMITE</td>
+                    <td *ngIf="factura.tipo == 'multa'">PAGO DE MULTA</td>
+                    <td *ngIf="factura.tipo == 'curso'">PAGO DE CURSO</td>
+                    <td>{{factura.responsable}}</td>
+                    <td>{{factura.fechaPago.substring(0,10)+' / '+factura.fechaPago.substring(11,19)}}</td>
+                    <td>S/ {{factura.total}}</td>
+                    <td *ngIf="factura.cancelado == 1"><p-tag value="EXTORNADO" severity="danger"></p-tag></td>
+                    <td *ngIf="factura.cancelado == 0"><p-tag value="NORMAL" severity="success" ></p-tag></td>
+                    <td>
+                        <button icon="pi pi-eye" pButton pRipple type="button" label="Ver" [routerLink]="['/facturas',factura.id]" class="p-button-outlined p-button-info"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <br>
+    </div>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>

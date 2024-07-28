@@ -1,0 +1,54 @@
+<br>
+<p-card header="LISTA DE CURSOS Y DIPLOMADOS" [style]="{ 'margin-bottom': '2em'}">
+    <ng-template pTemplate="header">
+    </ng-template>  
+    <p-toolbar *ngIf="authService.hasRole('ROLE_ADMIN')">
+        <div class="p-toolbar-group-left">
+                <div class="p-col-12 p-md-6">
+                    <div  class="p-inputgroup">
+                        <button pButton pRipple type="button" (click)="rutearCrear()" label="Crear Nuevo Curso/Diplomado" class="p-button-secondary ui-button"></button>         
+                    </div>
+                </div>
+        </div>
+    </p-toolbar>
+
+    <p-table #dt [value]="tramites" [rows]="10" [paginator]="true" [globalFilterFields]="['nombre','ponente','descripcion','precio']" responsiveLayout="scroll"[rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Mostrando {first} al {last} de {totalRecords} cursos/diplomados." [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h5 class="m-0"></h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText #textInput type="text" (input)="dt.filterGlobal(textInput.value, 'contains')" placeholder="Buscar curso/diplomado..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+                <th pSortableColumn="ponente">Ponente <p-sortIcon field="ponente"></p-sortIcon></th>
+                <th pSortableColumn="descripcion">Descripción<p-sortIcon field="descripcion"></p-sortIcon></th>
+                <th pSortableColumn="precio">Precio <p-sortIcon field="precio"></p-sortIcon></th>
+                <th >Estado <p-sortIcon></p-sortIcon></th>
+                <th >Acciones <p-sortIcon></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-tramite>
+            <tr>
+                <td>{{tramite.nombre}}</td>
+                <td>{{tramite.ponente}}</td>
+                <td>{{tramite.descripcion}}</td>
+                <td>S/ {{tramite.precio}}</td>
+                <td *ngIf="tramite.cancelado == 1"  ><p-tag value="Curso Activo" severity="success" ></p-tag></td>
+                <td *ngIf="tramite.cancelado == 0" ><p-tag severity="danger" value="Curso Inactivo"></p-tag></td>
+                <td>
+                    <button  pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info mr-2 mb-2"  (click)="rutearVer(tramite)"></button>
+                    <button  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning"  (click)="rutear(tramite)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</p-card>
+<br>

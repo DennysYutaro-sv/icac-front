@@ -1,0 +1,35 @@
+<p-toast></p-toast>
+<div class="card" style="padding: 0.5em 2em; background-color: #1f2d40;">
+    <h2 *ngIf="!universidad.id else h2Block" class="text-layout">Crear nueva universidad: </h2>
+    <ng-template #h2Block>
+        <h2 class="text-layout">Editar universidad: </h2>
+    </ng-template>
+    
+    <form >
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-12">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-copy"></i></span>
+                    <input  name="nombre" [(ngModel)]="universidad.nombre" type="text" pInputText placeholder="Nombre de la universidad" autocomplete="off" >         
+                </div>
+            </div>
+            <div class="col-12 md:col-12">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-sort-alpha-down"></i></span>
+                    <textarea name="descripcion" rows="3" cols="30" [(ngModel)]="universidad.descripcion" placeholder="Descripción de la universidad" pInputTextarea >{{universidad.descripcion}}</textarea>         
+                </div>
+            </div>
+
+            
+
+            <div class="col-12 md:col-4">
+                <p-button *ngIf="!universidad.id else elseBlock" label="Registrar Universidad" (click)="create()" icon="pi pi-check"></p-button>
+                <ng-template #elseBlock>
+                    <p-button label="Editar Universidad" type="button" (click)="update()" icon="pi pi-user-edit" class="p-button-info"></p-button>
+                </ng-template>
+                
+            </div>
+        </div>
+    </form>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</div>
