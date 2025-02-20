@@ -5,8 +5,11 @@
             <div class="text-6xl text-primary font-bold mb-3">La boleta nro: {{factura.numeroBoleta}}, se realizo con éxito.</div>
             <p class="mt-0 mb-4 text-700 line-height-3">Atención: Está es una representación gráfica de un pedido ordenado en el aplicativo Colegio de Abogados Cusco. Para más información visite el siguiente enlace: <A class="text-layout" target=_blank HREF="https://yawartech.com/"> YAWAR TECH S.A.C. 2023 </A></p> 
             
-            <button icon="pi pi-print" (click)="imprimirBoleta(1)" pButton pRipple label="Imprimir" type="button" class="mr-3 p-button-raised"></button>
-            <button icon="pi pi-download" (click)="imprimirBoleta(2)" pButton pRipple label="Descargar" type="button" class="mr-3 p-button-raised"></button>
+            <button icon="pi pi-print" (click)="imprimirBoleta(1)" pButton pRipple label="Imprimir Boleta Rapifac" type="button" class="mr-3 p-button-raised"></button>
+            <button icon="pi pi-download" (click)="imprimirBoleta(2)" pButton pRipple label="Descargar Boleta Rapifac" type="button" class="mr-3 p-button-raised"></button>
+            <!--<button pButton pRipple label="Boleta Rapifac" icon="pi pi-check-square" class="mr-3 p-button-raised" (click)="openRapifac(factura.repositorio)"></button>-->
+            <!--<button pButton pRipple label="Descargar Certificado" icon="pi pi-file" class="mr-3 p-button-raised" (click)="goRapifac()"></button>-->
+            
             <button icon="pi pi-sign-out" [routerLink]="['/colegiados/detalle',factura.colegiado.id]" pButton pRipple label="Terminar Pago" type="button" class="p-button-outlined"></button>
         </section>
     </div>

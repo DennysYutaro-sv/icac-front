@@ -32,18 +32,8 @@ export class CuotasComponent implements OnInit {
   tiposPagos = [{nombre:"efectivo"},{nombre:"deposito"}];
 
   tiposSeries = [
-    {nombre:"B001"},
-    {nombre:"B002"},
     {nombre:"B003"},
-    {nombre:"E001"},
-    {nombre:"E002"},
-    {nombre:"F001"},
-    {nombre:"F002"},
-    {nombre:"F003"},
-    {nombre:"S001"},
-    {nombre:"S002"},
-    {nombre:"Q001"},
-    {nombre:"Q002"}
+
   ];
 
   aux:string;

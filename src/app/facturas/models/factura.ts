@@ -37,5 +37,8 @@ export class Factura {
         this.total=this.total-this.descuento
         return this.total;
     }
-
+    //Parametros para RAPIFAC
+    correlativo:number;
+    rapifacEstado:string;
+    repositorio:string;
 }

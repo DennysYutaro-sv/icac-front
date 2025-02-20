@@ -50,52 +50,101 @@ export class PdfBoletaComponent implements OnInit {
   async imprimirBoleta(n:number){
     const documentDefinition = { 
       //pageOrientation: 'landscape',
+      pageMargins: [40, 20, 40, 20],
       content: 
       [
         {
           columns: [
-            [{
-              text: "Ilustre Colegio de Abogados del Cusco",
-              bold: true,
-              fontSize: 16,
-              alignment: 'center'
-            },
-            {
-              text: "Dirección : Calle Quiswar Lt. 18,19 y 20 Mz. E Urb.   La Planicie ",
-              fontSize: 8,
-            },
-            {
-              text: "San Sebastian - Cusco.",
-              fontSize: 8,
-            },
-            {
-              text: 'RUC : 20140278824',
-              fontSize: 8,
-            },
-            {
-              text: 'Telefono : 084 276866 | 932 228460',
-              fontSize: 8,
-            },
-            {
-              text: 'Estado Boleta : '+this.factura.responsable,
-              fontSize: 8,
-            },
-            {
-              text: 'Nro. Boleta: '+this.factura.numeroBoleta,
-              fontSize: 8,
-            }
-            ],
             [
               {
-                image: await this.getBase64ImageFromURL(
-                  "/assets/logo-boleta.jpg"
-                ),
-                width: 240,
-                alignment : 'right'
-              }
-            ]
-          ]
-        },
+                image: await this.getBase64ImageFromURL("/assets/logo-boleta.jpg"),
+                width: 190,
+                alignment: "center",
+              },
+              {
+                text: " ",
+                fontSize: 5,
+              },
+              {
+                text: "Dirección : Calle Quiswar Lt. 18,19 y 20 Mz. E Urb. La Planicie ",
+                fontSize: 8,
+              },
+              {
+                text: "San Sebastian - Cusco.",
+                fontSize: 8,
+              },
+              {
+                text: "Teléfono : 084 276866 | 932 228460",
+                fontSize: 8,
+              },
+              {
+                text: "Estado Boleta : " + this.factura.responsable,
+                fontSize: 8,
+              },
+            ],
+            {
+              table: {
+                widths: ["*"], // Ocupa el espacio disponible
+                body: [
+                  [
+                    {
+                      text: "RUC : 20140278824",
+                      fontSize: 12,
+                      
+                      
+                      border: [true, true, true, false], // Borde superior y laterales
+                      alignment: "center",
+                      margin: [5, 5, 5, 5], // Espaciado interno
+                    },
+                  ],
+                  [
+                    {
+                      text: "BOLETA DE VENTA",
+                      fontSize: 20,
+                      bold: true,
+                      alignment: "center",
+                      border: [true, false, true, false], // Borde inferior y laterales
+                      margin: [0, 0, 0, 0], // Espaciado interno
+                    },
+                  ],
+                  [
+                    {
+                      text: "ELECTRONICA",
+                      fontSize: 20,
+                      bold: true,
+                      alignment: "center",
+                      border: [true, false, true, false], // Borde inferior y laterales
+                      margin: [0, 0, 0, 0], // Espaciado interno
+                    },
+                  ],
+                  [
+                    {
+                      text: this.factura.correlativo ? "B003-"+ this.factura.correlativo : "-" ,
+                      fontSize: 12,
+                      border: [true, false, true, true], // Borde superior y laterales
+                      alignment: "center",
+                      margin: [5, 5, 5, 5], // Espaciado interno
+                    },
+                  ],
+                ],
+              },
+              layout: {
+                hLineWidth: function (i, node) {
+                  return 1; // Grosor de línea horizontal
+                },
+                vLineWidth: function (i, node) {
+                  return 1; // Grosor de línea vertical
+                },
+                hLineColor: function (i, node) {
+                  return "black"; // Color de línea horizontal
+                },
+                vLineColor: function (i, node) {
+                  return "black"; // Color de línea vertical
+                },
+              },
+            },
+          ],
+        },        
         {canvas: [{ type: 'line', x1: 0, y1: 3, x2: 595-2*40, y2: 3, lineWidth: 1.5 }]},
 
         {canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595-2*40, y2: 5, lineWidth: 3,color: 'white', }]},
@@ -104,11 +153,19 @@ export class PdfBoletaComponent implements OnInit {
           fontSize: 8,
         },
         {
+          text: "Colegiatura                       : "+this.factura.colegiado.colegiatura,
+          fontSize: 8,
+        },
+        {
           text: "Cliente                               : "+this.factura.colegiado.nombre+" "+this.factura.colegiado.apellido,
           fontSize: 8,
         },
         {
           text: "DNI                                     : "+this.factura.colegiado.dni,
+          fontSize: 8,
+        },
+        {
+          text: this.factura.rapifacEstado ? "RAPIFAC                            : "+this.factura.rapifacEstado : "TRAMITE                          : Pago Interno",
           fontSize: 8,
         },
         {canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595-2*40, y2: 5, lineWidth: 3,color: 'white', }]},
@@ -131,80 +188,112 @@ export class PdfBoletaComponent implements OnInit {
           }
         },
         {canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595-2*40, y2: 5, lineWidth: 3,color: 'white', }]},
-        {
-          columns: [
-            
-            [
-              {
-                table: {
-                  widths: ['100%'],
-                  heights: [10,5],
-                  body: [
-                      [
-                          { 
-                              text: 'OBSERVACIONES:',
-                              fontSize: 9,
-                              bold: true,
-                              border: [true, true, true, false],
-                          }
-                      ],
-                      [
-                          { 
-                              text: this.factura.observacion,
-                              fontSize: 6,
-                              bold: true,
-                              border: [true, false, true, true],
-                          }
-                      ],
-                  ],
-                },
-              },
-            ],
-            [
-              {
-                columns : [
-                  { qr: "COLEGIO-ABOGADOS-CUSCO-"+this.factura.numeroBoleta, fit : 50 ,alignment: 'center',},
-                ]
-              }
-            ],
-            [
-              {
-                table: {
-                  widths: ['100%'],
-                  heights: [30,5,5],
-                  body: [
-                      [
-                          { 
-                              text: ' ',
-                              fontSize: 10,
-                              bold: true,
-                              border: [false, false, false, false],
-                          }
-                      ],
-                      [
-                          { 
-                              text: "FIRMA CLIENTE",
-                              fontSize: 6,
-                              bold: true,
-                              border: [false, true, false, false],
-                              alignment: 'center',
-                          }
-                      ],
-                      [
-                        { 
-                            text: "DNI CLIENTE: ",
-                            fontSize: 6,
+        
+          {
+            table: {
+              widths: ["75%", "25%"], // Define el ancho de las columnas
+              body: [
+                [
+                  {
+                    table: {
+                      widths: ["100%"],
+                      body: [
+                        [
+                          {
+                            text: "OBSERVACIONES:",
+                            fontSize: 11,
                             bold: true,
-                            border: [false, false, false, false],
-                            alignment: 'left',
-                        }
-                    ],
-                  ],
-                },
+                            border: [false, false, false, false], 
+                            alignment: "left",
+                          },
+                        ],
+                        [
+                          {
+                            text: this.factura.observacion ? this.factura.observacion : "-",
+                            fontSize: 10,
+                            border: [false, false, false, false], 
+                          },
+                        ],
+                        [
+                          {
+                            text: "",
+                            fontSize: 10,
+                            border: [false, false, false, false], 
+                          },
+                        ],
+                        [
+                          {
+                            text: "",
+                            fontSize: 10,
+                            border: [false, false, false, false], 
+                          },
+                        ],
+                        [
+                          {
+                            text: "",
+                            fontSize: 10,
+                            border: [false, false, false, false], 
+                          },
+                        ],
+                        [
+                          {
+                            text: "Emitido a través de RAPIFAC Proveedor Autorizado por SUNAT, descarga el documento en WWW.RAPIFAC.COM - Autorizado mediante Resolución de Intendencia N° 094-005-0001933/SUNAT",
+                            fontSize: 8,
+                            bold: true,
+                            border: [false, false, false, false], 
+                          },
+                        ],
+                      ],
+                    },
+                    border: [true, true, true, true], // Borde negro para toda la tabla
+                  },
+                  {
+                    table: {
+                      widths: ["100%"],
+                      body: [
+                        [
+                          {
+                            qr:
+                              "https://icac-habilidad.web.app/colegiado/consulta-habilidad/" +
+                              this.factura.colegiado.colegiatura,
+                            fit: 70,
+                            alignment: "center",
+                            border: [false, false, false, false], // Sin bordes internos
+                            margin: [5, 5, 5, 5],
+                          },
+                        ],
+                        [
+                          {
+                            text: "Escanee el código QR para verificar su HABILIDAD EN LINEA",
+                            fontSize: 6,
+                            alignment: "center",
+                            border: [false, false, false, false], // Sin bordes internos
+                            margin: [5, 2, 5, 2], // Espaciado interno
+                          },
+                        ],
+                      ],
+                    },
+                  },
+                ],
+              ],
+            },
+            layout: {
+              hLineWidth: function (i, node) {
+                return 1; // Grosor del borde horizontal
               },
-            ]
-          ]
-        },
+              vLineWidth: function (i, node) {
+                return 1; // Grosor del borde vertical
+              },
+              hLineColor: function (i, node) {
+                return "black"; // Color del borde horizontal
+              },
+              vLineColor: function (i, node) {
+                return "black"; // Color del borde vertical
+              },
+            },
+          },
+          
+        /*
         {canvas: [{ type: 'line', x1: 0, y1: 2.5, x2: 595-2*40, y2: 2.5, lineWidth: 3,color: 'white', }]},
         {canvas: [{ type: 'line', x1: 0, y1: 3, x2: 595-2*40, y2: 3, lineWidth: 1.5 }]},
         {canvas: [{ type: 'line', x1: 0, y1: 2.5, x2: 595-2*40, y2: 2.5, lineWidth: 3,color: 'white', }]},
@@ -219,17 +308,18 @@ export class PdfBoletaComponent implements OnInit {
             ],
             [
               {
-                text: "!Muchas Gracias!",
+                text: "Emitido a través de RAPIFAC Proveedor Autorizado por SUNAT, descarga el documento en WWW.RAPIFAC.COM - Autorizado mediante Resolución de Intendencia N° 094-005-0001933/SUNAT",
                 bold: true,
-                fontSize: 15,
-                alignment: 'center'
+                fontSize: 6,
+                //alignment: 'center'
               },
             ]
           ]
-        },
+        },*/
       ],
       info: {
-        title: "BOLETA-" + this.factura.numeroBoleta,
+        title:  "BOLETA-" + this.factura.numeroBoleta,
+        
         author: "YAWAR TECH SAC",
         subject: 'BOLETA',
         keywords: 'BOLETA, YAWAR TECH',
@@ -286,5 +376,15 @@ export class PdfBoletaComponent implements OnInit {
       };
       img.src = url;
     });
+  }
+
+  openRapifac(repositorio:string) {
+    //window.open('https://wscomprobante-exp.rapifac.com/v0/comprobantes/pdf?key=IIKGJf7+cdow+hPJudVW3Q==', '_blank');
+    let urlPDF = 'https://wscomprobante.rapifac.com/v0/comprobantes/pdf?key='+repositorio
+    window.open(urlPDF, '_blank');
+  }
+  goRapifac() {
+    const pdfUrl = 'assets/certificado.pdf'; // Ruta relativa
+    window.open(pdfUrl, '_blank'); // Abre el PDF en una nueva pestaña
   }
 }
