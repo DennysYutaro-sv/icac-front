@@ -8,6 +8,7 @@ import { AuthService } from '../../usuarios/auth.service';
 import Swal from 'sweetalert2';
 
 import { URL_BACKEND } from 'src/app/config/config';
+import { CertificadoHabilidad } from '../models/certificado-habilidad';
 
 
 @Injectable({
@@ -15,6 +16,7 @@ import { URL_BACKEND } from 'src/app/config/config';
 })
 export class FacturaService {
   private urlEndPoint: string = URL_BACKEND + '/api/facturas';
+  private urlEndPointAux: string = URL_BACKEND + '/api';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json' });
 
   constructor(
@@ -130,5 +132,13 @@ export class FacturaService {
       })
     );
   }
-
+  //Obtener certificado habilidad
+  getObtenerCertificadoHabilidad(term1:string,term2:boolean):Observable<CertificadoHabilidad>{
+    return this.http.get<CertificadoHabilidad>(`${this.urlEndPointAux}/certificados-habilidad/${term1}/${term2}`,{headers:this.agregarAuthorizationHeader()}).pipe(
+      catchError(e=>{
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })
+    );
+  }
 }

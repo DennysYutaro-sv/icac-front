@@ -58,30 +58,39 @@
 <p-card >
     <form #facturaForm="ngForm">
         <div class="grid p-fluid">
-            <div class="col-12 md:col-12">
+            <div class="col-6 md:col-6">
                 <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Colegiado</h4>
                 <div class="p-inputgroup">
                     <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
                     <input readonly type="text" name="colegiado"  pInputText  value="{{factura.colegiado.nombre}} {{factura.colegiado.apellido}}">         
                 </div>
             </div>
+            <!--
             <div class="col-12 md:col-4">
                 <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Series</h4>
                 <p-dropdown [options]="tiposSeries"  [(ngModel)]="factura.serie" name="serie" placeholder="Seleccionar serie" optionValue="nombre" optionLabel="nombre"
                     [showClear]="true">
                 </p-dropdown> 
             </div>
-            <div class="col-12 md:col-4">
+            -->
+            <div class="col-3 md:col-3">
                 <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Método de pago</h4>
-                <p-dropdown [options]="tiposPagos"  [(ngModel)]="factura.formaPago" name="formaPago" placeholder="Seleccionar metodo de pago" optionValue="nombre" optionLabel="nombre"
-                    [showClear]="true">
+                <p-dropdown 
+                  [options]="tiposPagos"  
+                  [(ngModel)]="factura.formaPago" 
+                  name="formaPago" 
+                  placeholder="Seleccionar metodo de pago" 
+                  optionValue="nombre" 
+                  optionLabel="nombre"
+                  [showClear]="true"
+                  (onChange)="metodoPago($event)">
                 </p-dropdown>
-            </div>
-            <div class="col-12 md:col-4">
-                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Número de boleta RAPIFAC</h4>
+              </div>
+            <div class="col-3 md:col-3">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Serie RAPIFAC</h4>
                 <div class="p-inputgroup">
                     <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-                    <input type="text" name="numeroTransaccion" [(ngModel)]="factura.numeroTransaccion"  pInputText autocomplete="off">         
+                    <input type="text" readonly name="serie" [(ngModel)]="factura.serie"  pInputText autocomplete="off">         
                 </div>
             </div>
             <div class="col-12 md:col-12">

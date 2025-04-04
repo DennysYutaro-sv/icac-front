@@ -39,6 +39,7 @@ export class Factura {
     }
     //Parametros para RAPIFAC
     correlativo:number;
+    correlativo2:number;
     rapifacEstado:string;
     repositorio:string;
 }

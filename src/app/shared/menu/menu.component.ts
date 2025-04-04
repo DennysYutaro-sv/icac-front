@@ -328,14 +328,14 @@ mejora1(){
 }
 obtenerFilial(){
   this.authService.usuario.filial;
-  //tiposFilial = [{nombre:"CUSCO",valor:1},{nombre:"QUILLABAMBA",valor:2},{nombre:"ESPINAR",valor:3},{nombre:"SANTA MONICA",valor:4}];
+  //tiposFilial = [{nombre:"CUSCO",valor:1},{nombre:"LA CONVENCION",valor:2},{nombre:"ESPINAR",valor:3},{nombre:"CANCHIS",valor:4}];
   switch(this.authService.usuario.filial) {
     case 1: {
       this.filial = 'CUSCO'
       break;
     }
     case 2: {
-      this.filial = 'QUILLABAMBA'
+      this.filial = 'LA CONVENCION'
       break;
     }
     case 3: {
@@ -343,7 +343,7 @@ obtenerFilial(){
       break;
     }
     case 4: {
-      this.filial = 'SANTA MONICA'
+      this.filial = 'CANCHIS'
       break;
     }
   }

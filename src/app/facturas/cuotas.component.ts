@@ -249,4 +249,16 @@ export class CuotasComponent implements OnInit {
       }
   },500);
   }
+  metodoPago(event: any): void {
+    if(this.authService.usuario.filial == 1){
+      if(this.factura.formaPago == "efectivo" ){
+        this.factura.serie = "B003";
+      }else{
+        this.factura.serie = "B004";
+      }
+    }
+    else{
+      this.factura.serie= "B005";
+    }
+  }
 }

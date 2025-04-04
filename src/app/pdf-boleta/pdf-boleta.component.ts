@@ -5,6 +5,7 @@ import { Factura } from '../facturas/models/factura';
 import { FacturaService } from '../facturas/services/factura.service';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { CertificadoHabilidad } from '../facturas/models/certificado-habilidad';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
@@ -16,6 +17,8 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class PdfBoletaComponent implements OnInit {
   factura:Factura = new Factura();
+  
+  certificadoHabilidad:CertificadoHabilidad;
   constructor(
     public facturaService:FacturaService,
     private activatedRoute:ActivatedRoute,
@@ -31,6 +34,12 @@ export class PdfBoletaComponent implements OnInit {
       let id = +params.get('id')!;
       this.facturaService.getFactura(id).subscribe(factura =>{
         this.factura = factura;
+        if(factura.tipo=="cuota" && factura.filial==1){
+          this.facturaService.getObtenerCertificadoHabilidad(this.factura.colegiado.colegiatura,false).subscribe(certificado => {
+            this.certificadoHabilidad = certificado;
+            console.log('Certificado habilidad: '+certificado.colegiadoId)
+          })
+        }
         if(factura.cancelado == false){
           this.factura.responsable='NORMAL'
         }
@@ -44,9 +53,13 @@ export class PdfBoletaComponent implements OnInit {
           this.factura.colegiado.apellido=" ";
         }
         else{this.factura.extornador='EXTORNADO - CANCELADO'}
+        
       })
     })
   }
+
+  
+
   async imprimirBoleta(n:number){
     const documentDefinition = { 
       //pageOrientation: 'landscape',
@@ -119,7 +132,11 @@ export class PdfBoletaComponent implements OnInit {
                   ],
                   [
                     {
-                      text: this.factura.correlativo ? "B003-"+ this.factura.correlativo : "-" ,
+                      text:
+                      this.factura.correlativo
+                        ? "B003-" + this.factura.correlativo: this.factura.correlativo2
+                        ? "B004-" + this.factura.correlativo2
+                      : "-",
                       fontSize: 12,
                       border: [true, false, true, true], // Borde superior y laterales
                       alignment: "center",
@@ -165,7 +182,7 @@ export class PdfBoletaComponent implements OnInit {
           fontSize: 8,
         },
         {
-          text: this.factura.rapifacEstado ? "RAPIFAC                            : "+this.factura.rapifacEstado : "TRAMITE                          : Pago Interno",
+          text: this.factura.rapifacEstado ? "RAPIFAC                            : "+"ACEPTADA" : "TRAMITE                          : Pago Interno",
           fontSize: 8,
         },
         {canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595-2*40, y2: 5, lineWidth: 3,color: 'white', }]},
@@ -357,6 +374,7 @@ export class PdfBoletaComponent implements OnInit {
       pdfMake.createPdf(documentDefinition).download();
     }
   }
+  
 
   getBase64ImageFromURL(url) {
     return new Promise((resolve, reject) => {
@@ -378,6 +396,118 @@ export class PdfBoletaComponent implements OnInit {
     });
   }
 
+  
+
+  //Imprimir certificado habilidad
+async imprimirCertificado(n: number) {
+  const documentDefinition = {
+    pageSize: 'A4',
+    pageMargins: [0, 0, 0, 0], // Sin márgenes para que la imagen ocupe todo el fondo
+    background: [
+      {
+        image: await this.getBase64ImageFromURLHabilidad("/assets/certificado-habilidad.jpg"),
+        width: 595, // Ancho de A4 en puntos (portrait)
+        height: 842, // Alto de A4 en puntos (portrait)
+        absolutePosition: { x: 0, y: 0 } // Posiciona la imagen en toda la página
+      }
+    ],
+    content: [
+
+      {
+        text: " ",
+        style: 'header',
+        absolutePosition: { x: 200, y: 50 }, // Ajusta la posición del texto sobre la imagen
+      },
+      {
+        text: this.factura.colegiado.nombre + ' '+this.factura.colegiado.apellido,
+        style: 'name',
+        absolutePosition: { x: 210, y: 366 },
+      },
+      {
+        text: this.factura.colegiado.colegiatura,
+        style: 'name',
+        absolutePosition: { x: 210, y: 423.5 },
+      },
+      {
+        text: this.formatearFecha(this.factura.colegiado.fechaColegiatura),
+        style: 'name',
+        absolutePosition: { x: 300, y: 452 },
+      },
+      {
+        text: this.formatearFechaUltimoDia(this.factura.fechaHasta),
+        
+        style: 'name',
+        absolutePosition: { x: 265, y: 511 },
+      },
+      {
+        text:  this.formatearFecha(this.certificadoHabilidad.fechaEmision) + '.', 
+        style: 'name',
+        absolutePosition: { x: 350, y: 650 },
+      },
+      {
+        //certificado +this.certificadoHabilidad.id
+        text: "D-000"+this.certificadoHabilidad.id, 
+        style: 'certificateNumber',
+        absolutePosition: { x: 390, y: 740 },
+      }
+      
+    ],
+    info: {
+      title: "BOLETA-" + this.factura.numeroBoleta,
+      author: "YAWAR TECH SAC",
+      subject: 'BOLETA',
+      keywords: 'BOLETA, YAWAR TECH',
+    },
+    styles: {
+      header: {
+        fontSize: 18,
+        bold: true,
+        color: 'black'
+      },
+      name: {
+        fontSize: 16,
+        bold: true,
+        color: 'black'
+      },
+      text: {
+        fontSize: 14,
+        color: 'black'
+      },
+      certificateNumber: {
+        fontSize: 20,
+        bold: true,
+        color: 'red'
+      }
+    }
+  };
+
+  if (n == 1) {
+    pdfMake.createPdf(documentDefinition).print();
+  } else {
+    pdfMake.createPdf(documentDefinition).download();
+  }
+}
+
+getBase64ImageFromURLHabilidad(url) {
+  return new Promise((resolve, reject) => {
+    var img = new Image();
+    img.setAttribute("crossOrigin", "anonymous");
+    img.onload = () => {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      var dataURL = canvas.toDataURL("image/png");
+      resolve(dataURL);
+    };
+    img.onerror = error => {
+      reject(error);
+    };
+    img.src = url;
+  });
+}
+
   openRapifac(repositorio:string) {
     //window.open('https://wscomprobante-exp.rapifac.com/v0/comprobantes/pdf?key=IIKGJf7+cdow+hPJudVW3Q==', '_blank');
     let urlPDF = 'https://wscomprobante.rapifac.com/v0/comprobantes/pdf?key='+repositorio
@@ -386,5 +516,40 @@ export class PdfBoletaComponent implements OnInit {
   goRapifac() {
     const pdfUrl = 'assets/certificado.pdf'; // Ruta relativa
     window.open(pdfUrl, '_blank'); // Abre el PDF en una nueva pestaña
+  }
+  formatearFecha(fechaISO: string): string {
+    const fecha = new Date(fechaISO);
+    
+    // Opciones de formato en español
+    const opciones: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    
+    // Formatear la fecha en español
+    return fecha.toLocaleDateString('es-ES', opciones);
+  }
+
+  formatearFechaMesAnio(fechaISO: string): string {
+    const fecha = new Date(fechaISO);
+    
+    // Opciones de formato para obtener solo el mes en mayúsculas y el año
+    const opcionesMes: Intl.DateTimeFormatOptions = { month: 'long' };
+    const mes = fecha.toLocaleDateString('es-ES', opcionesMes).toUpperCase();
+    
+    const anio = fecha.getFullYear(); // Obtener el año
+  
+    return `${mes} - ${anio}`;
+  }
+  formatearFechaUltimoDia(fechaISO: string): string {
+    const fecha = new Date(fechaISO);
+    
+    // Obtener el último día del mes
+    const ultimoDia = new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0).getDate();
+    
+    // Opciones de formato para obtener el mes en español
+    const opcionesMes: Intl.DateTimeFormatOptions = { month: 'long' };
+    const mes = fecha.toLocaleDateString('es-ES', opcionesMes).toLowerCase();
+  
+    const anio = fecha.getFullYear(); // Obtener el año
+  
+    return `${ultimoDia} de ${mes} del ${anio}`;
   }
 }
