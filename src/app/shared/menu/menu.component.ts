@@ -121,9 +121,9 @@ export class MenuComponent implements OnInit {
         },
         {
           label:'Certificación de Habilidad',
-          icon:'pi pi-lock',
-          command : ()=> this.mejora(),
-          //routerLink: '/universidades',
+          icon:'pi pi-print',
+          //command : ()=> this.mejora(),
+          routerLink: '/certificado-habilidad',
           visible: this.authService.hasRole('ROLE_USER')
         },
       ]

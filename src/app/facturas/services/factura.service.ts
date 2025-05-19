@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 
 import { URL_BACKEND } from 'src/app/config/config';
 import { CertificadoHabilidad } from '../models/certificado-habilidad';
+import { CertificadoExterno } from 'src/app/certificado/certificado-externo';
 
 
 @Injectable({
@@ -135,6 +136,15 @@ export class FacturaService {
   //Obtener certificado habilidad
   getObtenerCertificadoHabilidad(term1:string,term2:boolean):Observable<CertificadoHabilidad>{
     return this.http.get<CertificadoHabilidad>(`${this.urlEndPointAux}/certificados-habilidad/${term1}/${term2}`,{headers:this.agregarAuthorizationHeader()}).pipe(
+      catchError(e=>{
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })
+    );
+  }
+  //Obtener certificado habilidad interno
+  getObtenerCertificadoInterno(term1:string):Observable<CertificadoExterno>{
+    return this.http.get<CertificadoExterno>(`${this.urlEndPoint}/icat-certificado-interno/${term1}`,{headers:this.agregarAuthorizationHeader()}).pipe(
       catchError(e=>{
         this.isNoAutorizado(e);
         return throwError(e);

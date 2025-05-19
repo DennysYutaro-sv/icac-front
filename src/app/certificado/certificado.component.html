@@ -1,0 +1,52 @@
+<p-card header="OBTENER CERTIFICADO DE HABILIDAD" [style]="{ 'margin-bottom': '2em','text-align': 'center'}">
+    <ng-template pTemplate="header">
+    </ng-template>  
+    <p-toolbar>
+        <div class="p-toolbar-group-left" style="width: 100%;">
+            <div class="grid p-fluid" style="width: 100%;">
+                <div class="col-12 md:col-6">
+                        <input type="text" name="term" [(ngModel)]="term" pInputText placeholder="Ingrese número de COLEGIATURA: 1000..." autocomplete="off">
+                </div>
+                <div class="col-12 md:col-6">
+                    <button icon="pi pi-search"  pButton pRipple type="button" (click)="buscarFactura(term)" label="Obtener certificado de HABILIDAD" class="p-button-warning p-button-outlined ui-button"></button>
+                </div>
+            </div>
+        </div>
+    </p-toolbar>
+</p-card>
+<p-card *ngIf="certificado.colegiatura" class="flex justify-content-center" [style]="{width: '90%'}" styleClass="p-card-shadow">
+    <div class="card" style="padding: 0.5em 2em; background-color: #1f2d40">
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <h2 class="text-layout">SE ELABORÓ CERTIFICADO PARA LA COLEGIATURA:  {{certificado.colegiatura}}</h2>
+            </div>
+            <div class="p-toolbar-group-right">
+                <p-button (onClick)="imprimirCertificado()" icon="pi pi-print" styleClass="p-button-success p-button-outlined ui-button" label="IMPRIMIR CERTIFICADO"></p-button>
+            </div>
+            
+        </p-toolbar>
+        <br>
+    </div>
+    <form #facturaForm="ngForm">
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-4">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Folio Digital</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly pInputText type="text" name="id" [(ngModel)]="certificado.codigoDigital" required pInputText  autocomplete="off"> 
+                </div>
+            </div>
+            <div class="col-12 md:col-8">
+                <h4 class="text-layout" style="margin-top: 0; margin-bottom: 1rem;">Colegiado</h4>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input readonly pInputText type="text" name="serie" [(ngModel)]="certificado.nombres" required pInputText  autocomplete="off"> 
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true"><p style="color: white" > Cargando Yawar Tech... </p></ngx-spinner>
+</p-card>
+<br>

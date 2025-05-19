@@ -49,6 +49,7 @@ import { BuscarFacturaComponent } from './buscar-factura/buscar-factura.componen
 import { ReporteCumpleComponent } from './reportes/reporte-cumple/reporte-cumple.component';
 import { PortalAgremiadoComponent } from './usuarios/portal-agremiado/portal-agremiado.component';
 import { RecordComponent } from './record/record.component';
+import { CertificadoComponent } from './certificado/certificado.component';
 
 registerLocaleData(localeES,'es');
 
@@ -105,6 +106,8 @@ const routes: Routes = [
   {path: 'portal-agremiado',component:PortalAgremiadoComponent},
   //Record de deudas
   {path: 'record-deudas/:id',component:RecordComponent},
+  //Certificado de habilidad
+  {path: 'certificado-habilidad',component:CertificadoComponent},
 ];
 
 @NgModule({
@@ -145,6 +148,7 @@ const routes: Routes = [
     ReporteCumpleComponent,
     PortalAgremiadoComponent,
     RecordComponent,
+    CertificadoComponent,
   ],
   imports: [
     BrowserModule,
